@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	envoy "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	envoyauth "github.com/envoyproxy/go-control-plane/envoy/api/v2/auth"
@@ -561,14 +562,15 @@ func (s *Server) makePublicListener(cInfo connectionInfo, cfgSnap *proxycfg.Conf
 		l = makeListener(PublicListenerName, addr, port)
 
 		opts := listenerFilterOpts{
-			useRDS:     false,
-			protocol:   cfg.Protocol,
-			filterName: "public_listener",
-			routeName:  "public_listener",
-			cluster:    LocalAppClusterName,
-			statPrefix: "",
-			routePath:  "",
-			ingress:    true,
+			useRDS:           false,
+			protocol:         cfg.Protocol,
+			filterName:       "public_listener",
+			routeName:        "public_listener",
+			cluster:          LocalAppClusterName,
+			statPrefix:       "",
+			routePath:        "",
+			ingress:          true,
+			requestTimeoutMs: cfg.LocalRequestTimeoutMs,
 		}
 
 		if useHTTPFilter {
@@ -1115,15 +1117,16 @@ func getAndModifyUpstreamConfigForListener(logger hclog.Logger, u *structs.Upstr
 }
 
 type listenerFilterOpts struct {
-	useRDS          bool
-	protocol        string
-	filterName      string
-	routeName       string
-	cluster         string
-	statPrefix      string
-	routePath       string
-	ingress         bool
-	httpAuthzFilter *envoyhttp.HttpFilter
+	useRDS           bool
+	protocol         string
+	filterName       string
+	routeName        string
+	cluster          string
+	statPrefix       string
+	routePath        string
+	ingress          bool
+	requestTimeoutMs *int
+	httpAuthzFilter  *envoyhttp.HttpFilter
 }
 
 func makeListenerFilter(opts listenerFilterOpts) (*envoylistener.Filter, error) {
@@ -1213,6 +1216,7 @@ func makeHTTPFilter(opts listenerFilterOpts) (*envoylistener.Filter, error) {
 		if opts.cluster == "" {
 			return nil, fmt.Errorf("must specify cluster name when not using RDS")
 		}
+
 		route := &envoyroute.Route{
 			Match: &envoyroute.RouteMatch{
 				PathSpecifier: &envoyroute.RouteMatch_Prefix{
@@ -1232,6 +1236,12 @@ func makeHTTPFilter(opts listenerFilterOpts) (*envoylistener.Filter, error) {
 				},
 			},
 		}
+
+		if opts.requestTimeoutMs != nil {
+			r := route.GetRoute()
+			r.Timeout = pbtypes.DurationProto(time.Duration(*opts.requestTimeoutMs) * time.Millisecond)
+		}
+
 		// If a path is provided, do not match on a catch-all prefix
 		if opts.routePath != "" {
 			route.Match.PathSpecifier = &envoyroute.RouteMatch_Path{Path: opts.routePath}
