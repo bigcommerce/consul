@@ -530,6 +530,7 @@ func (s *ResourceGenerator) makeIngressGatewayListeners(address string, cfgSnap 
 		} else {
 			// If multiple upstreams share this port, make a special listener for the protocol.
 			listener := makePortListener(listenerKey.Protocol, address, listenerKey.Port, envoy_core_v3.TrafficDirection_OUTBOUND)
+			timeout := 0
 			opts := listenerFilterOpts{
 				useRDS:          true,
 				protocol:        listenerKey.Protocol,
@@ -539,6 +540,7 @@ func (s *ResourceGenerator) makeIngressGatewayListeners(address string, cfgSnap 
 				statPrefix:      "ingress_upstream_",
 				routePath:       "",
 				httpAuthzFilter: nil,
+				requestTimeoutMs: &timeout,
 			}
 			filter, err := makeListenerFilter(opts)
 			if err != nil {
@@ -1131,6 +1133,7 @@ func (s *ResourceGenerator) makeFilterChainTerminatingGateway(
 	// Lastly we setup the actual proxying component. For L4 this is a straight
 	// tcp proxy. For L7 this is a very hands-off HTTP proxy just to inject an
 	// HTTP filter to do intention checks here instead.
+	timeout := 0
 	opts := listenerFilterOpts{
 		protocol:   protocol,
 		filterName: fmt.Sprintf("%s.%s.%s", service.Name, service.NamespaceOrDefault(), cfgSnap.Datacenter),
@@ -1138,6 +1141,7 @@ func (s *ResourceGenerator) makeFilterChainTerminatingGateway(
 		cluster:    cluster,
 		statPrefix: "upstream.",
 		routePath:  "",
+		requestTimeoutMs: &timeout,
 	}
 
 	if useHTTPFilter {
@@ -1342,6 +1346,7 @@ func (s *ResourceGenerator) makeUpstreamFilterChainForDiscoveryChain(
 		}
 	}
 
+	timeout := 0
 	opts := listenerFilterOpts{
 		useRDS:          useRDS,
 		protocol:        protocol,
@@ -1352,6 +1357,7 @@ func (s *ResourceGenerator) makeUpstreamFilterChainForDiscoveryChain(
 		routePath:       "",
 		ingressGateway:  false,
 		httpAuthzFilter: nil,
+		requestTimeoutMs: &timeout,
 	}
 	filter, err := makeListenerFilter(opts)
 	if err != nil {
@@ -1441,6 +1447,7 @@ func (s *ResourceGenerator) makeUpstreamListenerForDiscoveryChain(
 		filterName = upstreamID
 	}
 
+	timeout := 0
 	opts := listenerFilterOpts{
 		useRDS:          useRDS,
 		protocol:        cfg.Protocol,
@@ -1450,6 +1457,7 @@ func (s *ResourceGenerator) makeUpstreamListenerForDiscoveryChain(
 		statPrefix:      "upstream.",
 		routePath:       "",
 		httpAuthzFilter: nil,
+		requestTimeoutMs: &timeout,
 	}
 	filter, err := makeListenerFilter(opts)
 	if err != nil {
