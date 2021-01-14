@@ -540,6 +540,7 @@ func makeRouteActionFromName(clusterName string) *envoyroute.Route_Route {
 			ClusterSpecifier: &envoyroute.RouteAction_Cluster{
 				Cluster: clusterName,
 			},
+			Timeout: ptypes.DurationProto(time.Duration(0)),
 		},
 	}
 }
@@ -576,6 +577,7 @@ func makeRouteActionForSplitter(splits []*structs.DiscoverySplit, chain *structs
 					TotalWeight: makeUint32Value(10000), // scaled up 100%
 				},
 			},
+			Timeout: ptypes.DurationProto(time.Duration(0)),
 		},
 	}, nil
 }
