@@ -17,6 +17,7 @@
                 "prefix": "/"
               },
               "route": {
+                "timeout": "0s",
                 "weightedClusters": {
                   "clusters": [
                     {
