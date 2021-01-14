@@ -39,7 +39,8 @@
                             "prefix": "/"
                           },
                           "route": {
-                            "cluster": "payments.default.cloud.external.1c053652-8512-4373-90cf-5a7f6263a994.consul"
+                            "cluster": "payments.default.cloud.external.1c053652-8512-4373-90cf-5a7f6263a994.consul",
+                            "timeout": "0s"
                           }
                         }
                       ]
@@ -159,7 +160,8 @@
                             "prefix": "/"
                           },
                           "route": {
-                            "cluster": "refunds.default.cloud.external.1c053652-8512-4373-90cf-5a7f6263a994.consul"
+                            "cluster": "refunds.default.cloud.external.1c053652-8512-4373-90cf-5a7f6263a994.consul",
+                            "timeout": "0s"
                           }
                         }
                       ]
