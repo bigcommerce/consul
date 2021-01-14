@@ -26,7 +26,8 @@
                 "prefix": "/lil-bit-side"
               },
               "route": {
-                "cluster": "lil-bit-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "lil-bit-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -34,6 +35,7 @@
                 "prefix": "/"
               },
               "route": {
+                "timeout": "0s",
                 "weightedClusters": {
                   "clusters": [
                     {
