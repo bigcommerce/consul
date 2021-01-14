@@ -83,6 +83,7 @@ func (s *ResourceGenerator) makeIngressGatewayListeners(address string, cfgSnap 
 		} else {
 			// If multiple upstreams share this port, make a special listener for the protocol.
 			listener := makePortListener(listenerKey.Protocol, address, listenerKey.Port, envoy_core_v3.TrafficDirection_OUTBOUND)
+			timeout := 0
 			opts := listenerFilterOpts{
 				useRDS:          true,
 				protocol:        listenerKey.Protocol,
@@ -92,6 +93,7 @@ func (s *ResourceGenerator) makeIngressGatewayListeners(address string, cfgSnap 
 				statPrefix:      "ingress_upstream_",
 				routePath:       "",
 				httpAuthzFilter: nil,
+				requestTimeoutMs: &timeout,
 			}
 
 			// Generate any filter chains needed for services with custom TLS certs

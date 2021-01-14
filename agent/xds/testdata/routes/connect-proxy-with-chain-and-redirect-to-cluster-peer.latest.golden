@@ -16,7 +16,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "db.default.cluster-01.external.peer1.domain"
+                "cluster": "db.default.cluster-01.external.peer1.domain",
+                "timeout": "0s"
               }
             }
           ]
