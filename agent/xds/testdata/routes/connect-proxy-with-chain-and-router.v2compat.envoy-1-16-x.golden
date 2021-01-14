@@ -16,7 +16,8 @@
                 "prefix": "/prefix"
               },
               "route": {
-                "cluster": "prefix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "prefix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -24,7 +25,8 @@
                 "path": "/exact"
               },
               "route": {
-                "cluster": "exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -37,7 +39,8 @@
                 }
               },
               "route": {
-                "cluster": "regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -51,7 +54,8 @@
                 ]
               },
               "route": {
-                "cluster": "hdr-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "hdr-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -66,7 +70,8 @@
                 ]
               },
               "route": {
-                "cluster": "hdr-not-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "hdr-not-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -80,7 +85,8 @@
                 ]
               },
               "route": {
-                "cluster": "hdr-exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "hdr-exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -94,7 +100,8 @@
                 ]
               },
               "route": {
-                "cluster": "hdr-prefix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "hdr-prefix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -108,7 +115,8 @@
                 ]
               },
               "route": {
-                "cluster": "hdr-suffix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "hdr-suffix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -127,7 +135,8 @@
                 ]
               },
               "route": {
-                "cluster": "hdr-regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "hdr-regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -146,7 +155,8 @@
                 ]
               },
               "route": {
-                "cluster": "just-methods.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "just-methods.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -169,7 +179,8 @@
                 ]
               },
               "route": {
-                "cluster": "hdr-exact-with-method.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "hdr-exact-with-method.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -185,7 +196,8 @@
                 ]
               },
               "route": {
-                "cluster": "prm-exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "prm-exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -206,7 +218,8 @@
                 ]
               },
               "route": {
-                "cluster": "prm-regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "prm-regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -220,7 +233,8 @@
                 ]
               },
               "route": {
-                "cluster": "prm-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "prm-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -228,7 +242,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "nil-match.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "nil-match.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -236,7 +251,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "empty-match-1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "empty-match-1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -244,7 +260,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "empty-match-2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "empty-match-2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             },
             {
@@ -253,6 +270,7 @@
               },
               "route": {
                 "cluster": "prefix-rewrite-1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s",
                 "prefixRewrite": "/"
               }
             },
@@ -262,6 +280,7 @@
               },
               "route": {
                 "cluster": "prefix-rewrite-2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s",
                 "prefixRewrite": "/nested/newlocation"
               }
             },
@@ -280,6 +299,7 @@
               },
               "route": {
                 "cluster": "retry-connect.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s",
                 "retryPolicy": {
                   "retryOn": "connect-failure",
                   "numRetries": 15
@@ -292,6 +312,7 @@
               },
               "route": {
                 "cluster": "retry-codes.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s",
                 "retryPolicy": {
                   "retryOn": "retriable-status-codes",
                   "numRetries": 15,
@@ -309,6 +330,7 @@
               },
               "route": {
                 "cluster": "retry-both.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s",
                 "retryPolicy": {
                   "retryOn": "connect-failure,retriable-status-codes",
                   "retriableStatusCodes": [
@@ -324,6 +346,7 @@
                 "prefix": "/split-3-ways"
               },
               "route": {
+                "timeout": "0s",
                 "weightedClusters": {
                   "clusters": [
                     {
@@ -348,7 +371,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
