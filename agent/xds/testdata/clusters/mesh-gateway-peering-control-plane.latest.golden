@@ -7,16 +7,12 @@
       "type": "EDS",
       "edsClusterConfig": {
         "edsConfig": {
-          "ads": {
-
-          },
+          "ads": {},
           "resourceApiVersion": "V3"
         }
       },
       "connectTimeout": "5s",
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     }
   ],
   "typeUrl": "type.googleapis.com/envoy.config.cluster.v3.Cluster",

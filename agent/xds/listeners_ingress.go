@@ -137,6 +137,7 @@ func (s *ResourceGenerator) makeIngressGatewayListeners(address string, cfgSnap 
 			}
 			listener := makeListener(listenerOpts)
 
+			timeout := 0
 			filterOpts := listenerFilterOpts{
 				useRDS:           true,
 				fetchTimeoutRDS:  cfgSnap.GetXDSCommonConfig(s.Logger).GetXDSFetchTimeout(),
@@ -149,6 +150,7 @@ func (s *ResourceGenerator) makeIngressGatewayListeners(address string, cfgSnap 
 				httpAuthzFilters: nil,
 				accessLogs:       &cfgSnap.Proxy.AccessLogs,
 				logger:           s.Logger,
+				requestTimeoutMs: &timeout,
 			}
 
 			// Generate any filter chains needed for services with custom TLS certs

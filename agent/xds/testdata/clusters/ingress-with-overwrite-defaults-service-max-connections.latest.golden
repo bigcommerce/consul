@@ -8,9 +8,7 @@
       "type": "EDS",
       "edsClusterConfig": {
         "edsConfig": {
-          "ads": {
-
-          },
+          "ads": {},
           "resourceApiVersion": "V3"
         }
       },
@@ -23,22 +21,16 @@
           }
         ]
       },
-      "outlierDetection": {
-
-      },
+      "outlierDetection": {},
       "commonLbConfig": {
-        "healthyPanicThreshold": {
-
-        }
+        "healthyPanicThreshold": {}
       },
       "transportSocket": {
         "name": "tls",
         "typedConfig": {
           "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
           "commonTlsContext": {
-            "tlsParams": {
-
-            },
+            "tlsParams": {},
             "tlsCertificates": [
               {
                 "certificateChain": {

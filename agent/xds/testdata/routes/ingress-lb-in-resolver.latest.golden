@@ -30,6 +30,7 @@
                   ],
                   "totalWeight": 10000
                 },
+                "timeout": "0s",
                 "hashPolicy": [
                   {
                     "cookie": {

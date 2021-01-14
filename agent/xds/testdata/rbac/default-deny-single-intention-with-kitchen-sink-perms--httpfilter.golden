@@ -38,9 +38,7 @@
                           "urlPath": {
                             "path": {
                               "safeRegex": {
-                                "googleRe2": {
-
-                                },
+                                "googleRe2": {},
                                 "regex": "/v[123]"
                               }
                             }
@@ -50,9 +48,7 @@
                           "header": {
                             "name": ":method",
                             "safeRegexMatch": {
-                              "googleRe2": {
-
-                              },
+                              "googleRe2": {},
                               "regex": "GET|HEAD|OPTIONS"
                             }
                           }
@@ -115,9 +111,7 @@
                           "header": {
                             "name": "x-zim",
                             "safeRegexMatch": {
-                              "googleRe2": {
-
-                              },
+                              "googleRe2": {},
                               "regex": "gi[rR]"
                             }
                           }
@@ -154,9 +148,7 @@
                           "header": {
                             "name": "z-zim",
                             "safeRegexMatch": {
-                              "googleRe2": {
-
-                              },
+                              "googleRe2": {},
                               "regex": "gi[rR]"
                             },
                             "invertMatch": true
@@ -173,9 +165,7 @@
                             "urlPath": {
                               "path": {
                                 "safeRegex": {
-                                  "googleRe2": {
-
-                                  },
+                                  "googleRe2": {},
                                   "regex": "/v[123]"
                                 }
                               }
@@ -185,9 +175,7 @@
                             "header": {
                               "name": ":method",
                               "safeRegexMatch": {
-                                "googleRe2": {
-
-                                },
+                                "googleRe2": {},
                                 "regex": "GET|HEAD|OPTIONS"
                               }
                             }
@@ -223,9 +211,7 @@
               "authenticated": {
                 "principalName": {
                   "safeRegex": {
-                    "googleRe2": {
-
-                    },
+                    "googleRe2": {},
                     "regex": "^spiffe://test.consul/ns/default/dc/[^/]+/svc/web$"
                   }
                 }

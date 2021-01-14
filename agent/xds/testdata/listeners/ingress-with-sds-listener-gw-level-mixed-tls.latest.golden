@@ -52,9 +52,7 @@
             "typedConfig": {
               "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext",
               "commonTlsContext": {
-                "tlsParams": {
-
-                },
+                "tlsParams": {},
                 "tlsCertificateSdsSecretConfigs": [
                   {
                     "name": "listener-cert",

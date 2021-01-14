@@ -1,79 +1,82 @@
 {
-  "nonce": "00000001",
+  "versionInfo": "00000001",
   "resources": [
     {
       "@type": "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
       "name": "v1.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "validateClusters": true,
       "virtualHosts": [
         {
+          "name": "v1.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
           "domains": [
             "*"
           ],
-          "name": "v1.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
           "routes": [
             {
               "match": {
                 "prefix": "/"
               },
               "route": {
+                "cluster": "v1.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
                 "autoHostRewrite": true,
-                "cluster": "v1.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "timeout": "0s"
               }
             }
           ]
         }
-      ]
+      ],
+      "validateClusters": true
     },
     {
       "@type": "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
       "name": "v2.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "validateClusters": true,
       "virtualHosts": [
         {
+          "name": "v2.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
           "domains": [
             "*"
           ],
-          "name": "v2.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
           "routes": [
             {
               "match": {
                 "prefix": "/"
               },
               "route": {
+                "cluster": "v2.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
                 "autoHostRewrite": true,
-                "cluster": "v2.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "timeout": "0s"
               }
             }
           ]
         }
-      ]
+      ],
+      "validateClusters": true
     },
     {
       "@type": "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
       "name": "web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "validateClusters": true,
       "virtualHosts": [
         {
+          "name": "web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
           "domains": [
             "*"
           ],
-          "name": "web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
           "routes": [
             {
               "match": {
                 "prefix": "/"
               },
               "route": {
+                "cluster": "web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
                 "autoHostRewrite": true,
-                "cluster": "web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "timeout": "0s"
               }
             }
           ]
         }
-      ]
+      ],
+      "validateClusters": true
     }
   ],
   "typeUrl": "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
-  "versionInfo": "00000001"
+  "nonce": "00000001"
 }

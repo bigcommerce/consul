@@ -31,25 +31,19 @@
         "envoy.extensions.upstreams.http.v3.HttpProtocolOptions": {
           "@type": "type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions",
           "explicitHttpConfig": {
-            "http2ProtocolOptions": {
-
-            }
+            "http2ProtocolOptions": {}
           }
         }
       },
       "dnsRefreshRate": "10s",
       "dnsLookupFamily": "V4_ONLY",
-      "outlierDetection": {
-
-      },
+      "outlierDetection": {},
       "transportSocket": {
         "name": "tls",
         "typedConfig": {
           "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
           "commonTlsContext": {
-            "tlsParams": {
-
-            },
+            "tlsParams": {},
             "validationContext": {
               "trustedCa": {
                 "filename": "ca.cert.pem"
@@ -89,25 +83,19 @@
         "envoy.extensions.upstreams.http.v3.HttpProtocolOptions": {
           "@type": "type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions",
           "explicitHttpConfig": {
-            "http2ProtocolOptions": {
-
-            }
+            "http2ProtocolOptions": {}
           }
         }
       },
       "dnsRefreshRate": "10s",
       "dnsLookupFamily": "V4_ONLY",
-      "outlierDetection": {
-
-      },
+      "outlierDetection": {},
       "transportSocket": {
         "name": "tls",
         "typedConfig": {
           "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
           "commonTlsContext": {
-            "tlsParams": {
-
-            },
+            "tlsParams": {},
             "validationContext": {
               "trustedCa": {
                 "filename": "ca.cert.pem"
@@ -147,25 +135,19 @@
         "envoy.extensions.upstreams.http.v3.HttpProtocolOptions": {
           "@type": "type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions",
           "explicitHttpConfig": {
-            "http2ProtocolOptions": {
-
-            }
+            "http2ProtocolOptions": {}
           }
         }
       },
       "dnsRefreshRate": "10s",
       "dnsLookupFamily": "V4_ONLY",
-      "outlierDetection": {
-
-      },
+      "outlierDetection": {},
       "transportSocket": {
         "name": "tls",
         "typedConfig": {
           "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
           "commonTlsContext": {
-            "tlsParams": {
-
-            },
+            "tlsParams": {},
             "validationContext": {
               "trustedCa": {
                 "filename": "ca.cert.pem"

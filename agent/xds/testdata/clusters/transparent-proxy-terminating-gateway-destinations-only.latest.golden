@@ -25,9 +25,7 @@
           }
         ]
       },
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     },
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
@@ -53,9 +51,7 @@
           }
         ]
       },
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     },
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
@@ -81,9 +77,7 @@
           }
         ]
       },
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     },
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
@@ -109,9 +103,7 @@
           }
         ]
       },
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     },
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
@@ -139,9 +131,7 @@
       },
       "dnsRefreshRate": "10s",
       "dnsLookupFamily": "V4_ONLY",
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     },
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
@@ -169,17 +159,13 @@
       },
       "dnsRefreshRate": "10s",
       "dnsLookupFamily": "V4_ONLY",
-      "outlierDetection": {
-
-      },
+      "outlierDetection": {},
       "transportSocket": {
         "name": "tls",
         "typedConfig": {
           "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
           "commonTlsContext": {
-            "tlsParams": {
-
-            },
+            "tlsParams": {},
             "validationContext": {
               "trustedCa": {
                 "filename": "cert.pem"
@@ -221,9 +207,7 @@
       },
       "dnsRefreshRate": "10s",
       "dnsLookupFamily": "V4_ONLY",
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     },
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
@@ -251,9 +235,7 @@
       },
       "dnsRefreshRate": "10s",
       "dnsLookupFamily": "V4_ONLY",
-      "outlierDetection": {
-
-      }
+      "outlierDetection": {}
     }
   ],
   "typeUrl": "type.googleapis.com/envoy.config.cluster.v3.Cluster",

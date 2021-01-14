@@ -16,7 +16,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "destination.www-google-com.google.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "destination.www-google-com.google.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -39,7 +40,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "destination.192-168-2-3.kafka2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "destination.192-168-2-3.kafka2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -55,7 +57,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "destination.192-168-2-2.kafka2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "destination.192-168-2-2.kafka2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -71,7 +74,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "destination.192-168-2-1.kafka.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "destination.192-168-2-1.kafka.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]

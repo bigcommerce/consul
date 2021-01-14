@@ -49,9 +49,7 @@
       "@type": "type.googleapis.com/envoy.config.endpoint.v3.ClusterLoadAssignment",
       "clusterName": "no-endpoints.default.peer-a.external.1c053652-8512-4373-90cf-5a7f6263a994.consul",
       "endpoints": [
-        {
-
-        }
+        {}
       ]
     }
   ],
