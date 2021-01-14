@@ -3,6 +3,7 @@ package xds
 import (
 	"errors"
 	"fmt"
+	"github.com/hashicorp/go-hclog"
 	"net"
 	"net/url"
 	"regexp"
@@ -27,7 +28,6 @@ import (
 	envoy_tls_v3 "github.com/envoyproxy/go-control-plane/envoy/extensions/transport_sockets/tls/v3"
 	envoy_type_v3 "github.com/envoyproxy/go-control-plane/envoy/type/v3"
 
-	"github.com/hashicorp/go-hclog"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -1760,16 +1760,18 @@ func (s *ResourceGenerator) makeFilterChainTerminatingGateway(cfgSnap *proxycfg.
 	// Lastly we setup the actual proxying component. For L4 this is a straight
 	// tcp proxy. For L7 this is a very hands-off HTTP proxy just to inject an
 	// HTTP filter to do intention checks here instead.
+	timeout := 0
 	opts := listenerFilterOpts{
-		protocol:   tgtwyOpts.protocol,
-		filterName: fmt.Sprintf("%s.%s.%s.%s", tgtwyOpts.service.Name, tgtwyOpts.service.NamespaceOrDefault(), tgtwyOpts.service.PartitionOrDefault(), cfgSnap.Datacenter),
-		routeName:  tgtwyOpts.cluster, // Set cluster name for route config since each will have its own
-		cluster:    tgtwyOpts.cluster,
-		statPrefix: "upstream.",
-		routePath:  "",
-		tracing:    tracing,
-		accessLogs: &cfgSnap.Proxy.AccessLogs,
-		logger:     s.Logger,
+		protocol:         tgtwyOpts.protocol,
+		filterName:       fmt.Sprintf("%s.%s.%s.%s", tgtwyOpts.service.Name, tgtwyOpts.service.NamespaceOrDefault(), tgtwyOpts.service.PartitionOrDefault(), cfgSnap.Datacenter),
+		routeName:        tgtwyOpts.cluster, // Set cluster name for route config since each will have its own
+		cluster:          tgtwyOpts.cluster,
+		statPrefix:       "upstream.",
+		routePath:        "",
+		tracing:          tracing,
+		accessLogs:       &cfgSnap.Proxy.AccessLogs,
+		logger:           s.Logger,
+		requestTimeoutMs: &timeout,
 	}
 
 	if useHTTPFilter {
@@ -2138,6 +2140,7 @@ func (s *ResourceGenerator) makeUpstreamFilterChain(opts filterChainOpts) (*envo
 	if opts.statPrefix == "" {
 		opts.statPrefix = "upstream."
 	}
+	timeout := 0
 	filter, err := makeListenerFilter(listenerFilterOpts{
 		useRDS:               opts.useRDS,
 		protocol:             opts.protocol,
@@ -2150,6 +2153,7 @@ func (s *ResourceGenerator) makeUpstreamFilterChain(opts filterChainOpts) (*envo
 		tracing:              opts.tracing,
 		accessLogs:           opts.accessLogs,
 		logger:               s.Logger,
+		requestTimeoutMs:     &timeout,
 	})
 	if err != nil {
 		return nil, err
