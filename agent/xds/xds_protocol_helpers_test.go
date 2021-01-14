@@ -794,6 +794,7 @@ func makeTestRoute(t *testing.T, fixtureName string) *envoy_route_v3.RouteConfig
 									ClusterSpecifier: &envoy_route_v3.RouteAction_Cluster{
 										Cluster: "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
 									},
+									Timeout: durationpb.New(time.Duration(0)),
 								},
 							},
 						},
@@ -820,6 +821,7 @@ func makeTestRoute(t *testing.T, fixtureName string) *envoy_route_v3.RouteConfig
 									ClusterSpecifier: &envoy_route_v3.RouteAction_Cluster{
 										Cluster: "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
 									},
+									Timeout: durationpb.New(time.Duration(0)),
 								},
 							},
 						},
