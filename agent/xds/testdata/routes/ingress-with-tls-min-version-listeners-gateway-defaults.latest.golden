@@ -18,7 +18,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "s1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "s1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -42,7 +43,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "s2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "s2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -66,7 +68,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "s3.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "s3.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -90,7 +93,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "s4.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "s4.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -114,7 +118,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "s4.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "s4.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]

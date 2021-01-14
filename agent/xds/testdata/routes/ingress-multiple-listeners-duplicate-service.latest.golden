@@ -18,7 +18,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "foo.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "foo.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -42,7 +43,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "foo.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "foo.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -59,7 +61,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "bar.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "bar.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
