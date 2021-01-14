@@ -16,7 +16,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "canary1.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "canary1.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -39,7 +40,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "canary2.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "canary2.web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
@@ -62,7 +64,8 @@
                 "prefix": "/"
               },
               "route": {
-                "cluster": "web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul"
+                "cluster": "web.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                "timeout": "0s"
               }
             }
           ]
