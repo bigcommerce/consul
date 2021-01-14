@@ -320,6 +320,7 @@ func (s *Server) makeIngressGatewayListeners(address string, cfgSnap *proxycfg.C
 		} else {
 			// If multiple upstreams share this port, make a special listener for the protocol.
 			listener := makeListener(listenerKey.Protocol, address, listenerKey.Port)
+			timeout := 0
 			opts := listenerFilterOpts{
 				useRDS:          true,
 				protocol:        listenerKey.Protocol,
@@ -330,6 +331,7 @@ func (s *Server) makeIngressGatewayListeners(address string, cfgSnap *proxycfg.C
 				routePath:       "",
 				ingress:         false,
 				httpAuthzFilter: nil,
+				requestTimeoutMs: &timeout,
 			}
 			filter, err := makeListenerFilter(opts)
 			if err != nil {
@@ -850,6 +852,7 @@ func (s *Server) makeFilterChainTerminatingGateway(
 	// tcp proxy. For L7 this is a very hands-off HTTP proxy just to inject an
 	// HTTP filter to do intention checks here instead.
 	statPrefix := fmt.Sprintf("terminating_gateway.%s.%s.", service.NamespaceOrDefault(), service.Name)
+	timeout := 0
 	opts := listenerFilterOpts{
 		protocol:   protocol,
 		filterName: listener,
@@ -858,6 +861,7 @@ func (s *Server) makeFilterChainTerminatingGateway(
 		statPrefix: statPrefix,
 		routePath:  "",
 		ingress:    false,
+		requestTimeoutMs: &timeout,
 	}
 
 	if useHTTPFilter {
@@ -1052,6 +1056,7 @@ func (s *Server) makeUpstreamListenerForDiscoveryChain(
 		filterName = upstreamID
 	}
 
+	timeout := 0
 	opts := listenerFilterOpts{
 		useRDS:          useRDS,
 		protocol:        cfg.Protocol,
@@ -1062,6 +1067,7 @@ func (s *Server) makeUpstreamListenerForDiscoveryChain(
 		routePath:       "",
 		ingress:         false,
 		httpAuthzFilter: nil,
+		requestTimeoutMs: &timeout,
 	}
 	filter, err := makeListenerFilter(opts)
 	if err != nil {
