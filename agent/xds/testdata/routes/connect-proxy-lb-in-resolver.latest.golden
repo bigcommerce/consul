@@ -1,56 +1,57 @@
 {
-  "versionInfo": "00000001",
-  "resources": [
+  "versionInfo":  "00000001",
+  "resources":  [
     {
-      "@type": "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
-      "name": "db",
-      "virtualHosts": [
+      "@type":  "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
+      "name":  "db",
+      "virtualHosts":  [
         {
-          "name": "db",
-          "domains": [
+          "name":  "db",
+          "domains":  [
             "*"
           ],
-          "routes": [
+          "routes":  [
             {
-              "match": {
-                "prefix": "/"
+              "match":  {
+                "prefix":  "/"
               },
-              "route": {
-                "weightedClusters": {
-                  "clusters": [
+              "route":  {
+                "weightedClusters":  {
+                  "clusters":  [
                     {
-                      "name": "something-else.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-                      "weight": 9550
+                      "name":  "something-else.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                      "weight":  9550
                     },
                     {
-                      "name": "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-                      "weight": 450
+                      "name":  "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
+                      "weight":  450
                     }
                   ]
                 },
-                "hashPolicy": [
+                "timeout":  "0s",
+                "hashPolicy":  [
                   {
-                    "cookie": {
-                      "name": "chocolate-chip"
+                    "cookie":  {
+                      "name":  "chocolate-chip"
                     },
-                    "terminal": true
+                    "terminal":  true
                   },
                   {
-                    "cookie": {
-                      "name": "chocolate-chip",
-                      "ttl": "0s"
+                    "cookie":  {
+                      "name":  "chocolate-chip",
+                      "ttl":  "0s"
                     }
                   },
                   {
-                    "header": {
-                      "headerName": "x-user-id"
+                    "header":  {
+                      "headerName":  "x-user-id"
                     }
                   },
                   {
-                    "connectionProperties": {
-                      "sourceIp": true
+                    "connectionProperties":  {
+                      "sourceIp":  true
                     },
-                    "terminal": true
+                    "terminal":  true
                   }
                 ]
               }
@@ -58,9 +59,9 @@
           ]
         }
       ],
-      "validateClusters": true
+      "validateClusters":  true
     }
   ],
-  "typeUrl": "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
-  "nonce": "00000001"
+  "typeUrl":  "type.googleapis.com/envoy.config.route.v3.RouteConfiguration",
+  "nonce":  "00000001"
 }
