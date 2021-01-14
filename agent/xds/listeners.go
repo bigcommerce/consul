@@ -1635,6 +1635,7 @@ func (s *ResourceGenerator) makeFilterChainTerminatingGateway(cfgSnap *proxycfg.
 	// Lastly we setup the actual proxying component. For L4 this is a straight
 	// tcp proxy. For L7 this is a very hands-off HTTP proxy just to inject an
 	// HTTP filter to do intention checks here instead.
+	timeout := 0
 	opts := listenerFilterOpts{
 		protocol:   tgtwyOpts.protocol,
 		filterName: fmt.Sprintf("%s.%s.%s.%s", tgtwyOpts.service.Name, tgtwyOpts.service.NamespaceOrDefault(), tgtwyOpts.service.PartitionOrDefault(), cfgSnap.Datacenter),
@@ -1643,6 +1644,7 @@ func (s *ResourceGenerator) makeFilterChainTerminatingGateway(cfgSnap *proxycfg.
 		statPrefix: "upstream.",
 		routePath:  "",
 		tracing:    tracing,
+		requestTimeoutMs: &timeout,
 	}
 
 	if useHTTPFilter {
@@ -1956,6 +1958,7 @@ func (s *ResourceGenerator) makeUpstreamFilterChain(opts filterChainOpts) (*envo
 	if opts.statPrefix == "" {
 		opts.statPrefix = "upstream."
 	}
+	timeout := 0
 	filter, err := makeListenerFilter(listenerFilterOpts{
 		useRDS:               opts.useRDS,
 		protocol:             opts.protocol,
@@ -1966,6 +1969,7 @@ func (s *ResourceGenerator) makeUpstreamFilterChain(opts filterChainOpts) (*envo
 		forwardClientDetails: opts.forwardClientDetails,
 		forwardClientPolicy:  opts.forwardClientPolicy,
 		tracing:              opts.tracing,
+		requestTimeoutMs:     &timeout,
 	})
 	if err != nil {
 		return nil, err
