@@ -132,6 +132,32 @@ spec:
                       Added in v1.6.0.`,
     },
     {
+      name: 'Limits',
+      type: 'UpstreamLimitsConfig: <optional>',
+      description: `Controls various circuit breaker limits for Envoy that a service instance is subject to when communicating with this upstream`,
+      children: [
+        {
+          name: 'MaxConnections',
+          type: 'int: 1024',
+          description: `Controls the maximum number of connections a service instance can establish against this upstream. Use this to
+                          limit HTTP/1.1 traffic, since HTTP/1.1 has a request per connection.`,
+        },
+        {
+          name: 'MaxPendingRequests',
+          type: 'int: 1024',
+          description: `Controls the maximum number of requests that a service instance will queue while waiting for a connection to
+                        be established to this upstream. Only valid for L7 protocols.`,
+        },
+        {
+          name: 'MaxConcurrentRequests',
+          type: 'int: 1024',
+          description: `Controls the maximum number of concurrent requests a service instance may have against this upstream at a single
+                        point in time. Use this to limit HTTP/2 traffic, since HTTP/2 has many requests per connection. Only valid for L7
+                        protocols.`,
+        },
+      ]
+    },
+    {
       name: 'Expose',
       type: 'ExposeConfig: <optional>',
       description: `Controls the default

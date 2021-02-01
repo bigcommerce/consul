@@ -91,15 +91,22 @@ type ExposePath struct {
 	ParsedFromCheck bool
 }
 
+type UpstreamLimitsConfig struct {
+	MaxConnections        *int `json:",omitempty" alias:"max_connections"`
+	MaxPendingRequests    *int `json:",omitempty" alias:"max_pending_requests"`
+	MaxConcurrentRequests *int `json:",omitempty" alias:"max_concurrent_requests"`
+}
+
 type ServiceConfigEntry struct {
 	Kind        string
 	Name        string
-	Namespace   string            `json:",omitempty"`
-	Protocol    string            `json:",omitempty"`
-	MeshGateway MeshGatewayConfig `json:",omitempty" alias:"mesh_gateway"`
-	Expose      ExposeConfig      `json:",omitempty"`
-	ExternalSNI string            `json:",omitempty" alias:"external_sni"`
-	Meta        map[string]string `json:",omitempty"`
+	Namespace   string               `json:",omitempty"`
+	Protocol    string               `json:",omitempty"`
+	MeshGateway MeshGatewayConfig    `json:",omitempty" alias:"mesh_gateway"`
+	Expose      ExposeConfig         `json:",omitempty"`
+	Limits      UpstreamLimitsConfig `json:",omitempty"`
+	ExternalSNI string               `json:",omitempty" alias:"external_sni"`
+	Meta        map[string]string    `json:",omitempty"`
 	CreateIndex uint64
 	ModifyIndex uint64
 }

@@ -49,6 +49,7 @@ func TestCompile(t *testing.T) {
 		"noop split to resolver with default subset":       testcase_NoopSplit_WithDefaultSubset(),
 		"resolver with default subset":                     testcase_Resolve_WithDefaultSubset(),
 		"default resolver with external sni":               testcase_DefaultResolver_ExternalSNI(),
+		"default resolver with limits":                     testcase_DefaultResolver_Limits(),
 		"resolver with no entries and inferring defaults":  testcase_DefaultResolver(),
 		"default resolver with proxy defaults":             testcase_DefaultResolver_WithProxyDefaults(),
 		"loadbalancer splitter and resolver":               testcase_LBSplitterAndResolver(),
@@ -1609,6 +1610,43 @@ func testcase_Resolver_ExternalSNI_RedirectNotAllowed() compileTestCase {
 	}
 }
 
+func testcase_DefaultResolver_Limits() compileTestCase {
+	limits := structs.UpstreamLimitsConfig{
+		MaxConnections:        intPointer(100),
+		MaxPendingRequests:    intPointer(101),
+		MaxConcurrentRequests: intPointer(102),
+	}
+
+	entries := newEntries()
+	entries.AddServices(&structs.ServiceConfigEntry{
+		Kind:   structs.ServiceDefaults,
+		Name:   "main",
+		Limits: limits,
+	})
+
+	expect := &structs.CompiledDiscoveryChain{
+		Protocol:  "tcp",
+		StartNode: "resolver:main.default.dc1",
+		Nodes: map[string]*structs.DiscoveryGraphNode{
+			"resolver:main.default.dc1": {
+				Type: structs.DiscoveryGraphNodeTypeResolver,
+				Name: "main.default.dc1",
+				Resolver: &structs.DiscoveryResolver{
+					Default:        true,
+					ConnectTimeout: 5 * time.Second,
+					Target:         "main.default.dc1",
+				},
+			},
+		},
+		Targets: map[string]*structs.DiscoveryTarget{
+			"main.default.dc1": newTarget("main", "", "default", "dc1", func(t *structs.DiscoveryTarget) {
+				t.Limits = limits
+			}),
+		},
+	}
+	return compileTestCase{entries: entries, expect: expect, expectIsDefault: true}
+}
+
 func testcase_MultiDatacenterCanary() compileTestCase {
 	entries := newEntries()
 	setServiceProtocol(entries, "main", "http")
@@ -2528,4 +2566,8 @@ func newTarget(service, serviceSubset, namespace, datacenter string, modFn func(
 		modFn(t)
 	}
 	return t
+}
+
+func intPointer(i int) *int {
+	return &i
 }
