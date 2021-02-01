@@ -191,7 +191,7 @@ type UpstreamConfig struct {
 
 	// Limits are the set of limits that are applied to the proxy for a specific upstream of a
 	// service instance.
-	Limits UpstreamLimits `mapstructure:"limits"`
+	Limits structs.UpstreamLimitsConfig `mapstructure:"limits"`
 
 	// PassiveHealthCheck configuration
 	PassiveHealthCheck PassiveHealthCheck `mapstructure:"passive_health_check"`

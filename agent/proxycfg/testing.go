@@ -701,6 +701,10 @@ func TestConfigSnapshotDiscoveryChainExternalSNI(t testing.T) *ConfigSnapshot {
 	return testConfigSnapshotDiscoveryChain(t, "external-sni")
 }
 
+func TestConfigSnapshotDiscoveryChainLimits(t testing.T) *ConfigSnapshot {
+	return testConfigSnapshotDiscoveryChain(t, "limits")
+}
+
 func TestConfigSnapshotDiscoveryChainWithOverrides(t testing.T) *ConfigSnapshot {
 	return testConfigSnapshotDiscoveryChain(t, "simple-with-overrides")
 }
@@ -841,6 +845,18 @@ func setupTestVariationConfigEntriesAndSnapshot(
 				Kind:           structs.ServiceResolver,
 				Name:           "db",
 				ConnectTimeout: 33 * time.Second,
+			},
+		)
+	case "limits":
+		entries = append(entries,
+			&structs.ServiceConfigEntry{
+				Kind: structs.ServiceDefaults,
+				Name: "db",
+				Limits: structs.UpstreamLimitsConfig{
+					MaxConnections:        intPointer(100),
+					MaxPendingRequests:    intPointer(101),
+					MaxConcurrentRequests: intPointer(102),
+				},
 			},
 		)
 	case "failover":
@@ -1332,6 +1348,7 @@ func setupTestVariationConfigEntriesAndSnapshot(
 	case "simple-with-overrides":
 	case "simple":
 	case "external-sni":
+	case "limits":
 	case "failover":
 		snap.WatchedUpstreamEndpoints["db"]["fail.default.dc1"] =
 			TestUpstreamNodesAlternate(t)
@@ -2097,4 +2114,8 @@ func golden(t testing.T, name string) string {
 	require.NoError(t, err)
 
 	return string(expected)
+}
+
+func intPointer(i int) *int {
+	return &i
 }
