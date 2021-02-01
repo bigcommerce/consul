@@ -509,3 +509,23 @@ func (e *ExposeConfig) Finalize() {
 		}
 	}
 }
+
+type UpstreamLimitsConfig struct {
+	MaxConnections        *int `json:",omitempty" alias:"max_connections"`
+	MaxPendingRequests    *int `json:",omitempty" alias:"max_pending_requests"`
+	MaxConcurrentRequests *int `json:",omitempty" alias:"max_concurrent_requests"`
+}
+
+func (src *UpstreamLimitsConfig) Merge(overrides *UpstreamLimitsConfig) *UpstreamLimitsConfig {
+	dst := src
+	if overrides.MaxConnections != nil {
+		dst.MaxConnections = overrides.MaxConnections
+	}
+	if overrides.MaxPendingRequests != nil {
+		dst.MaxPendingRequests = overrides.MaxPendingRequests
+	}
+	if overrides.MaxConcurrentRequests != nil {
+		dst.MaxConcurrentRequests = overrides.MaxConcurrentRequests
+	}
+	return dst
+}

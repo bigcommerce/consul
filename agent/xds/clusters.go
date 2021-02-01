@@ -490,6 +490,9 @@ func (s *Server) makeUpstreamClustersForDiscoveryChain(
 			}
 		}
 
+		// overlay proxy upstream limits (more specific) over the top of discovery chain limits
+		limits := target.Limits.Merge(&cfg.Limits)
+
 		s.Logger.Debug("generating cluster for", "cluster", clusterName)
 		c := &envoy.Cluster{
 			Name:                 clusterName,
@@ -509,7 +512,7 @@ func (s *Server) makeUpstreamClustersForDiscoveryChain(
 				},
 			},
 			CircuitBreakers: &envoycluster.CircuitBreakers{
-				Thresholds: makeThresholdsIfNeeded(cfg.Limits),
+				Thresholds: makeThresholdsIfNeeded(*limits),
 			},
 			OutlierDetection: cfg.PassiveHealthCheck.AsOutlierDetection(),
 		}
@@ -738,8 +741,8 @@ func injectTerminatingGatewayTLSContext(cfgSnap *proxycfg.ConfigSnapshot, cluste
 	}
 }
 
-func makeThresholdsIfNeeded(limits UpstreamLimits) []*envoycluster.CircuitBreakers_Thresholds {
-	var empty UpstreamLimits
+func makeThresholdsIfNeeded(limits structs.UpstreamLimitsConfig) []*envoycluster.CircuitBreakers_Thresholds {
+	var empty structs.UpstreamLimitsConfig
 	// Make sure to not create any thresholds when passed the zero-value in order
 	// to rely on Envoy defaults
 	if limits == empty {

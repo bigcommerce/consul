@@ -109,6 +109,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 				}
 				protocol = "http"
 				external_sni = "abc-123"
+				limits = {
+					max_connections = 100
+					max_pending_requests = 101
+					max_concurrent_requests = 102
+				}
 				mesh_gateway {
 					mode = "remote"
 				}
@@ -122,6 +127,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 				}
 				Protocol = "http"
 				ExternalSNI = "abc-123"
+				Limits {
+					MaxConnections = 100
+					MaxPendingRequests = 101
+					MaxConcurrentRequests = 102
+				}
 				MeshGateway {
 					Mode = "remote"
 				}
@@ -135,6 +145,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 				},
 				Protocol:    "http",
 				ExternalSNI: "abc-123",
+				Limits: UpstreamLimitsConfig{
+					MaxConnections:        intPointer(100),
+					MaxPendingRequests:    intPointer(101),
+					MaxConcurrentRequests: intPointer(102),
+				},
 				MeshGateway: MeshGatewayConfig{
 					Mode: MeshGatewayModeRemote,
 				},
@@ -1333,4 +1348,8 @@ func TestConfigEntryResponseMarshalling(t *testing.T) {
 func requireContainsLower(t *testing.T, haystack, needle string) {
 	t.Helper()
 	require.Contains(t, strings.ToLower(haystack), strings.ToLower(needle))
+}
+
+func intPointer(i int) *int {
+	return &i
 }

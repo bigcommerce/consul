@@ -151,8 +151,9 @@ func TestClustersFromSnapshot(t *testing.T) {
 			},
 		},
 		{
-			name:   "custom-limits",
-			create: proxycfg.TestConfigSnapshot,
+			name: "custom-limits",
+			// custom limits should override discovery chain limits
+			create: proxycfg.TestConfigSnapshotDiscoveryChainLimits,
 			setup: func(snap *proxycfg.ConfigSnapshot) {
 				for i := range snap.Proxy.Upstreams {
 					if snap.Proxy.Upstreams[i].Config == nil {
@@ -168,6 +169,23 @@ func TestClustersFromSnapshot(t *testing.T) {
 			},
 		},
 		{
+			// the discovery chain returns values for "db" for max_connections etc but on the
+			// proxy upstream config we want to override max_concurrent_requests..
+			name:   "custom-limits-fallback-to-discovery-chain-limits",
+			create: proxycfg.TestConfigSnapshotDiscoveryChainLimits,
+			setup: func(snap *proxycfg.ConfigSnapshot) {
+				for i := range snap.Proxy.Upstreams {
+					if snap.Proxy.Upstreams[i].Config == nil {
+						snap.Proxy.Upstreams[i].Config = map[string]interface{}{}
+					}
+
+					snap.Proxy.Upstreams[i].Config["limits"] = map[string]interface{}{
+						"max_concurrent_requests": 0,
+					}
+				}
+			},
+		},
+		{
 			name:   "connect-proxy-with-chain",
 			create: proxycfg.TestConfigSnapshotDiscoveryChain,
 			setup:  nil,
@@ -175,6 +193,11 @@ func TestClustersFromSnapshot(t *testing.T) {
 		{
 			name:   "connect-proxy-with-chain-external-sni",
 			create: proxycfg.TestConfigSnapshotDiscoveryChainExternalSNI,
+			setup:  nil,
+		},
+		{
+			name:   "connect-proxy-with-chain-limits",
+			create: proxycfg.TestConfigSnapshotDiscoveryChainLimits,
 			setup:  nil,
 		},
 		{
@@ -818,7 +841,7 @@ var customAppClusterJSONTpl = `{
 	"hosts": [
 		{
 			"socketAddress": {
-				"address": "127.0.0.1", 
+				"address": "127.0.0.1",
 				"portValue": 8080
 			}
 		}

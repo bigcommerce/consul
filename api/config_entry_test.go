@@ -330,6 +330,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 				},
 				"Protocol": "http",
 				"ExternalSNI": "abc-123",
+				"Limits": {
+					"MaxConnections": 1024,
+					"MaxPendingRequests": 2048,
+					"MaxConcurrentRequests": 3072
+				},
 				"MeshGateway": {
 					"Mode": "remote"
 				}
@@ -344,6 +349,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 				},
 				Protocol:    "http",
 				ExternalSNI: "abc-123",
+				Limits: UpstreamLimitsConfig{
+					MaxConnections:        intPointer(1024),
+					MaxPendingRequests:    intPointer(2048),
+					MaxConcurrentRequests: intPointer(3072),
+				},
 				MeshGateway: MeshGatewayConfig{
 					Mode: MeshGatewayModeRemote,
 				},
@@ -1090,4 +1100,8 @@ func TestDecodeConfigEntry(t *testing.T) {
 			require.Equal(t, tc.expect, got[0])
 		})
 	}
+}
+
+func intPointer(i int) *int {
+	return &i
 }
