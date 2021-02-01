@@ -869,10 +869,17 @@ RESOLVE_AGAIN:
 
 	target.Subset = resolver.Subsets[target.ServiceSubset]
 
-	if serviceDefault := c.entries.GetService(targetID); serviceDefault != nil && serviceDefault.ExternalSNI != "" {
-		// Override the default SNI value.
-		target.SNI = serviceDefault.ExternalSNI
-		target.External = true
+	if serviceDefault := c.entries.GetService(targetID); serviceDefault != nil {
+		if serviceDefault.ExternalSNI != "" {
+			// Override the default SNI value.
+			target.SNI = serviceDefault.ExternalSNI
+			target.External = true
+		}
+
+		var empty structs.UpstreamLimitsConfig
+		if serviceDefault.Limits != empty {
+			target.Limits = serviceDefault.Limits
+		}
 	}
 
 	// If using external SNI the service is fundamentally external.

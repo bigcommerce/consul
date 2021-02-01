@@ -219,7 +219,7 @@ func TestParseUpstreamConfig(t *testing.T) {
 			want: UpstreamConfig{
 				ConnectTimeoutMs: 5000,
 				Protocol:         "tcp",
-				Limits: UpstreamLimits{
+				Limits: structs.UpstreamLimitsConfig{
 					MaxConnections:        intPointer(50),
 					MaxPendingRequests:    intPointer(60),
 					MaxConcurrentRequests: intPointer(70),
@@ -238,7 +238,7 @@ func TestParseUpstreamConfig(t *testing.T) {
 			want: UpstreamConfig{
 				ConnectTimeoutMs: 5000,
 				Protocol:         "tcp",
-				Limits: UpstreamLimits{
+				Limits: structs.UpstreamLimitsConfig{
 					MaxConnections:        intPointer(0),
 					MaxPendingRequests:    intPointer(0),
 					MaxConcurrentRequests: intPointer(0),
