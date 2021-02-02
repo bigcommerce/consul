@@ -877,8 +877,8 @@ RESOLVE_AGAIN:
 		}
 
 		var empty structs.UpstreamLimitsConfig
-		if serviceDefault.Limits != empty {
-			target.Limits = serviceDefault.Limits
+		if serviceDefault.UpstreamLimits != empty {
+			target.UpstreamLimits = serviceDefault.UpstreamLimits
 		}
 	}
 

@@ -84,7 +84,7 @@ type ServiceConfigEntry struct {
 	Protocol    string
 	MeshGateway MeshGatewayConfig    `json:",omitempty" alias:"mesh_gateway"`
 	Expose      ExposeConfig         `json:",omitempty"`
-	Limits      UpstreamLimitsConfig `json:",omitempty"`
+	UpstreamLimits      UpstreamLimitsConfig `json:",omitempty" alias:"upstream_limits"`
 
 	ExternalSNI string `json:",omitempty" alias:"external_sni"`
 
