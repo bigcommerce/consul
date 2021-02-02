@@ -491,7 +491,7 @@ func (s *Server) makeUpstreamClustersForDiscoveryChain(
 		}
 
 		// overlay proxy upstream limits (more specific) over the top of discovery chain limits
-		limits := target.Limits.Merge(&cfg.Limits)
+		limits := target.UpstreamLimits.Merge(&cfg.Limits)
 
 		s.Logger.Debug("generating cluster for", "cluster", clusterName)
 		c := &envoy.Cluster{

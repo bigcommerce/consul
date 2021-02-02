@@ -852,7 +852,7 @@ func setupTestVariationConfigEntriesAndSnapshot(
 			&structs.ServiceConfigEntry{
 				Kind: structs.ServiceDefaults,
 				Name: "db",
-				Limits: structs.UpstreamLimitsConfig{
+				UpstreamLimits: structs.UpstreamLimitsConfig{
 					MaxConnections:        intPointer(100),
 					MaxPendingRequests:    intPointer(101),
 					MaxConcurrentRequests: intPointer(102),
