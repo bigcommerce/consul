@@ -1621,7 +1621,7 @@ func testcase_DefaultResolver_Limits() compileTestCase {
 	entries.AddServices(&structs.ServiceConfigEntry{
 		Kind:   structs.ServiceDefaults,
 		Name:   "main",
-		Limits: limits,
+		UpstreamLimits: limits,
 	})
 
 	expect := &structs.CompiledDiscoveryChain{
@@ -1640,7 +1640,7 @@ func testcase_DefaultResolver_Limits() compileTestCase {
 		},
 		Targets: map[string]*structs.DiscoveryTarget{
 			"main.default.dc1": newTarget("main", "", "default", "dc1", func(t *structs.DiscoveryTarget) {
-				t.Limits = limits
+				t.UpstreamLimits = limits
 			}),
 		},
 	}
