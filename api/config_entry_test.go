@@ -330,7 +330,7 @@ func TestDecodeConfigEntry(t *testing.T) {
 				},
 				"Protocol": "http",
 				"ExternalSNI": "abc-123",
-				"Limits": {
+				"UpstreamLimits": {
 					"MaxConnections": 1024,
 					"MaxPendingRequests": 2048,
 					"MaxConcurrentRequests": 3072
@@ -349,7 +349,7 @@ func TestDecodeConfigEntry(t *testing.T) {
 				},
 				Protocol:    "http",
 				ExternalSNI: "abc-123",
-				Limits: UpstreamLimitsConfig{
+				UpstreamLimits: UpstreamLimitsConfig{
 					MaxConnections:        intPointer(1024),
 					MaxPendingRequests:    intPointer(2048),
 					MaxConcurrentRequests: intPointer(3072),

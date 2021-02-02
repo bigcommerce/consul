@@ -204,7 +204,7 @@ type DiscoveryTarget struct {
 
 	MeshGateway MeshGatewayConfig     `json:",omitempty"`
 	Subset      ServiceResolverSubset `json:",omitempty"`
-	Limits      UpstreamLimitsConfig  `json:",omitempty"`
+	UpstreamLimits      UpstreamLimitsConfig  `json:",omitempty"`
 
 	// External is true if this target is outside of this consul cluster.
 	External bool `json:",omitempty"`
