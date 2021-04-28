@@ -655,6 +655,15 @@ func (s *ResourceGenerator) makeUpstreamClustersForDiscoveryChain(
 				sni = actualTarget.SNI
 			}
 		}
+		// temporary to assist in migration back to vanilla consul, set discovery chain
+ 		// limits to fixed values, so we can remove config entries containing UpstreamLimits
+ 		// these are Envoy + BC specifics. we only want these for proxies, not local_app
+ 		if clusterName != "local_app" && cfg.Limits == nil {
+			max := 2048
+			cfg.Limits = &structs.UpstreamLimits{
+				MaxConnections: &max,
+			}
+ 		}
 
 		spiffeIDs := []connect.SpiffeIDService{targetSpiffeID}
 		seenIDs := map[string]struct{}{
