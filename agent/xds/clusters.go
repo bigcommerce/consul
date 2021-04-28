@@ -1322,6 +1322,16 @@ func (s *ResourceGenerator) makeUpstreamClustersForDiscoveryChain(
 				continue
 			}
 
+			// temporary to assist in migration back to vanilla consul, set discovery chain
+			// limits to fixed values, so we can remove config entries containing UpstreamLimits
+			// these are Envoy + BC specifics. we only want these for proxies, not local_app
+			if targetData.clusterName != "local_app" && upstreamConfig.Limits == nil {
+				max := 4096
+				upstreamConfig.Limits = &structs.UpstreamLimits{
+					MaxConnections: &max,
+				}
+			}
+
 			targetSpiffeID := connect.SpiffeIDService{
 				Host:       cfgSnap.Roots.TrustDomain,
 				Namespace:  target.Namespace,
