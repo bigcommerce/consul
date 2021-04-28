@@ -15,7 +15,9 @@
       },
       "connectTimeout": "5s",
       "circuitBreakers": {
-
+        "thresholds": [{
+          "maxConnections": 2048
+        }]
       },
       "tlsContext": {
         "commonTlsContext": {
