@@ -490,6 +490,15 @@ func (s *Server) makeUpstreamClustersForDiscoveryChain(
 			}
 		}
 
+		// temporary to assist in migration back to vanilla consul, set discovery chain
+		// limits to fixed values, so we can remove config entries containing UpstreamLimits
+		// these are Envoy + BC specifics. we only want these for proxies, not local_app
+		if clusterName != "local_app" {
+			target.UpstreamLimits = structs.UpstreamLimitsConfig{
+				MaxConnections:        intPointer(2048), // storefront specific
+			}
+		}
+
 		// overlay proxy upstream limits (more specific) over the top of discovery chain limits
 		limits := target.UpstreamLimits.Merge(&cfg.Limits)
 
@@ -828,4 +837,8 @@ func injectLBToCluster(ec *structs.LoadBalancer, c *envoy.Cluster) error {
 		return fmt.Errorf("unsupported load balancer policy %q for cluster %q", ec.Policy, c.Name)
 	}
 	return nil
+}
+
+func intPointer(i int) *int {
+	return &i
 }

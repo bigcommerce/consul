@@ -759,7 +759,9 @@ func expectClustersJSONResources(snap *proxycfg.ConfigSnapshot) map[string]strin
 
 				},
 				"circuitBreakers": {
-
+					"thresholds": [{
+						"maxConnections": 2048
+					}]
 				},
 				"altStatName": "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
 				"commonLbConfig": {

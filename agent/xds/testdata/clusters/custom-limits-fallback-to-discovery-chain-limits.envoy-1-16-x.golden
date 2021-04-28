@@ -17,8 +17,7 @@
       "circuitBreakers": {
         "thresholds": [
           {
-            "maxConnections": 100,
-            "maxPendingRequests": 101,
+            "maxConnections": 2048,
             "maxRequests": 0
           }
         ]

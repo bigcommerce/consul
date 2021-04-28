@@ -16,7 +16,9 @@
       "connectTimeout": "5s",
       "lbPolicy": "RING_HASH",
       "circuitBreakers": {
-
+        "thresholds": [{
+          "maxConnections": 2048
+        }]
       },
       "tlsContext": {
         "commonTlsContext": {
@@ -68,7 +70,9 @@
       },
       "connectTimeout": "5s",
       "circuitBreakers": {
-
+        "thresholds": [{
+          "maxConnections": 2048
+        }]
       },
       "tlsContext": {
         "commonTlsContext": {
