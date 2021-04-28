@@ -434,7 +434,13 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{},
+			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
+					&envoy_cluster_v3.CircuitBreakers_Thresholds{
+						MaxConnections: makeUint32Value(4096),
+					},
+				},
+			},
 			OutlierDetection: &envoy_cluster_v3.OutlierDetection{},
 			AltStatName:      dbSNI,
 			CommonLbConfig: &envoy_cluster_v3.Cluster_CommonLbConfig{
@@ -452,7 +458,13 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{},
+			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
+					&envoy_cluster_v3.CircuitBreakers_Thresholds{
+						MaxConnections: makeUint32Value(4096),
+					},
+				},
+			},
 			OutlierDetection: &envoy_cluster_v3.OutlierDetection{},
 			AltStatName:      dbSNI,
 			CommonLbConfig: &envoy_cluster_v3.Cluster_CommonLbConfig{
@@ -470,7 +482,13 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{},
+			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
+					&envoy_cluster_v3.CircuitBreakers_Thresholds{
+						MaxConnections: makeUint32Value(4096),
+					},
+				},
+			},
 			OutlierDetection: &envoy_cluster_v3.OutlierDetection{},
 			AltStatName:      dbSNI,
 			CommonLbConfig: &envoy_cluster_v3.Cluster_CommonLbConfig{
@@ -503,7 +521,13 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{},
+			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
+					&envoy_cluster_v3.CircuitBreakers_Thresholds{
+						MaxConnections: makeUint32Value(4096),
+					},
+				},
+			},
 			OutlierDetection: &envoy_cluster_v3.OutlierDetection{},
 			AltStatName:      dbSNI,
 			CommonLbConfig: &envoy_cluster_v3.Cluster_CommonLbConfig{
