@@ -17,7 +17,11 @@
       "connectTimeout": "5s",
       "lbPolicy": "RING_HASH",
       "circuitBreakers": {
-
+        "thresholds": [
+          {
+            "maxConnections": 2048
+          }
+        ]
       },
       "outlierDetection": {
 
@@ -156,7 +160,11 @@
       },
       "connectTimeout": "5s",
       "circuitBreakers": {
-
+        "thresholds": [
+          {
+            "maxConnections": 2048
+          }
+        ]
       },
       "outlierDetection": {
 

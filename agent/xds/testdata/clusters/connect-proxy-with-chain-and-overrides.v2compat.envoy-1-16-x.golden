@@ -16,7 +16,11 @@
       },
       "connectTimeout": "66s",
       "circuitBreakers": {
-
+        "thresholds": [
+          {
+            "maxConnections": 2048
+          }
+        ]
       },
       "http2ProtocolOptions": {
 
