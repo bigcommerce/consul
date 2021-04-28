@@ -1495,6 +1495,19 @@ func (s *ResourceGenerator) makeUpstreamClustersForDiscoveryChain(
 		for _, groupedTarget := range targetGroups {
 			s.Logger.Debug("generating cluster for", "cluster", groupedTarget.ClusterName)
 
+			// temporary to assist in migration back to vanilla consul, set discovery chain
+			// limits to fixed values, so we can remove config entries containing UpstreamLimits
+			// these are Envoy + BC specifics. we only want these for proxies, not local_app
+			var clusterThresholdLimits *structs.UpstreamLimits
+			if groupedTarget.ClusterName != "local_app" && upstreamConfig.Limits == nil {
+				max := 4096
+				clusterThresholdLimits = &structs.UpstreamLimits{
+					MaxConnections: &max,
+				}
+			} else {
+				clusterThresholdLimits = upstreamConfig.Limits
+			}
+
 			c := &envoy_cluster_v3.Cluster{
 				Name:                 groupedTarget.ClusterName,
 				AltStatName:          groupedTarget.ClusterName,
@@ -1516,7 +1529,7 @@ func (s *ResourceGenerator) makeUpstreamClustersForDiscoveryChain(
 				},
 				// TODO(peering): make circuit breakers or outlier detection work?
 				CircuitBreakers: &envoy_cluster_v3.CircuitBreakers{
-					Thresholds: makeThresholdsIfNeeded(upstreamConfig.Limits),
+					Thresholds: makeThresholdsIfNeeded(clusterThresholdLimits),
 				},
 				OutlierDetection: config.ToOutlierDetection(upstreamConfig.PassiveHealthCheck, nil, true),
 			}
