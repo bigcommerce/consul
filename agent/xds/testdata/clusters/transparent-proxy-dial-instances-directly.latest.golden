@@ -13,7 +13,13 @@
         }
       },
       "connectTimeout":  "5s",
-      "circuitBreakers":  {},
+      "circuitBreakers":  {
+        "thresholds":  [
+          {
+            "maxConnections":  4096
+          }
+        ]
+      },
       "outlierDetection":  {},
       "commonLbConfig":  {
         "healthyPanicThreshold":  {}
@@ -117,7 +123,13 @@
         }
       },
       "connectTimeout":  "5s",
-      "circuitBreakers":  {},
+      "circuitBreakers":  {
+        "thresholds":  [
+          {
+            "maxConnections":  4096
+          }
+        ]
+      },
       "outlierDetection":  {},
       "commonLbConfig":  {
         "healthyPanicThreshold":  {}
@@ -193,7 +205,13 @@
         }
       },
       "connectTimeout":  "33s",
-      "circuitBreakers":  {},
+      "circuitBreakers":  {
+        "thresholds":  [
+          {
+            "maxConnections":  4096
+          }
+        ]
+      },
       "outlierDetection":  {},
       "commonLbConfig":  {
         "healthyPanicThreshold":  {}
