@@ -4,7 +4,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "big-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -55,7 +61,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -106,7 +118,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "empty-match-1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -157,7 +175,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "empty-match-2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -208,7 +232,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -259,7 +289,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "goldilocks-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -310,7 +346,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "hdr-exact-with-method.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -361,7 +403,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "hdr-exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -412,7 +460,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "hdr-not-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -463,7 +517,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "hdr-prefix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -514,7 +574,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "hdr-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -565,7 +631,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "hdr-regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -616,7 +688,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "hdr-suffix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -667,7 +745,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "header-manip.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -718,7 +802,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "idle-timeout.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -769,7 +859,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "just-methods.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -820,7 +916,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "lil-bit-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -871,7 +973,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "nil-match.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -922,7 +1030,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "prefix-rewrite-1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -973,7 +1087,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "prefix-rewrite-2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1024,7 +1144,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "prefix.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1075,7 +1201,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "prm-exact.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1126,7 +1258,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "prm-present.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1177,7 +1315,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "prm-regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1228,7 +1372,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "regex.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1279,7 +1429,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "req-timeout.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1330,7 +1486,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "retry-all.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1381,7 +1543,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "retry-codes.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1432,7 +1600,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "retry-connect.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -1483,7 +1657,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "retry-reset.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
