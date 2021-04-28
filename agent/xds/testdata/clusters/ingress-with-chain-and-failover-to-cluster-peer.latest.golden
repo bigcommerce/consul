@@ -30,7 +30,13 @@
         }
       },
       "connectTimeout":  "33s",
-      "circuitBreakers":  {},
+      "circuitBreakers":  {
+        "thresholds":  [
+          {
+            "maxConnections":  4096
+          }
+        ]
+      },
       "outlierDetection":  {
         "maxEjectionPercent":  100
       },
@@ -80,7 +86,13 @@
         }
       },
       "connectTimeout":  "33s",
-      "circuitBreakers":  {},
+      "circuitBreakers":  {
+        "thresholds":  [
+          {
+            "maxConnections":  4096
+          }
+        ]
+      },
       "outlierDetection":  {},
       "commonLbConfig":  {
         "healthyPanicThreshold":  {}
