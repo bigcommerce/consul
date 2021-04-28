@@ -4,7 +4,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "big-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -55,7 +61,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "db.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -106,7 +118,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "goldilocks-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
@@ -157,7 +175,13 @@
     {
       "@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
       "altStatName": "lil-bit-side.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-      "circuitBreakers": {},
+      "circuitBreakers": {
+        "thresholds": [
+          {
+            "maxConnections": 4096
+          }
+        ]
+      },
       "commonLbConfig": {
         "healthyPanicThreshold": {}
       },
