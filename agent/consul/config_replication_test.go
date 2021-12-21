@@ -14,6 +14,27 @@ import (
 )
 
 func TestReplication_ConfigSort(t *testing.T) {
+
+	ingressGateway := &structs.IngressGatewayConfigEntry{
+		Kind: "ingress-gateway",
+		Name: "ingress",
+		Listeners: []structs.IngressListener{
+			{
+				Port: 8888,
+				Services: []structs.IngressService{
+					{
+						Name: "api",
+					},
+				},
+			},
+		},
+	}
+
+	proxyDefault := &structs.ProxyConfigEntry{
+		Name: structs.ProxyConfigGlobal,
+		Config: map[string]interface{}{},
+	}
+
 	newDefaults := func(name, protocol string) *structs.ServiceConfigEntry {
 		return &structs.ServiceConfigEntry{
 			Kind:     structs.ServiceDefaults,
@@ -35,6 +56,18 @@ func TestReplication_ConfigSort(t *testing.T) {
 	}
 
 	cases := map[string]testcase{
+		"thing": {
+			configs: []structs.ConfigEntry{
+				newDefaults("web", "grpc"),
+				ingressGateway,
+				proxyDefault,
+			},
+			expect: []structs.ConfigEntry{
+				proxyDefault,
+				ingressGateway,
+				newDefaults("web", "grpc"),
+			},
+		},
 		"none": {},
 		"one": {
 			configs: []structs.ConfigEntry{
