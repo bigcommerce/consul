@@ -64,6 +64,12 @@ func diffConfigEntries(local []structs.ConfigEntry, remote []structs.ConfigEntry
 }
 
 func cmpConfigLess(first structs.ConfigEntry, second structs.ConfigEntry) bool {
+	if (first.GetKind() == "proxy-defaults") {
+		return true
+	}
+	if (second.GetKind() == "proxy-defaults") {
+		return false
+	}
 	if first.GetKind() < second.GetKind() {
 		return true
 	}
