@@ -292,6 +292,13 @@ func TestAPI_ConfigEntry_DiscoveryChain(t *testing.T) {
 							ResponseHeaders: &HTTPHeaderModifiers{
 								Remove: []string{"x-foo"},
 							},
+							MirrorPolicy: &ServiceRouteDestinationMirror{
+								Service:       "test-mirror",
+								ServiceSubset: "v3",
+								Namespace:     defaultNamespace,
+								Partition:     defaultPartition,
+								Percent:       44,
+							},
 						},
 					},
 				},
