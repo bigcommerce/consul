@@ -11,6 +11,7 @@ import (
 	envoy_core_v3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	envoy_route_v3 "github.com/envoyproxy/go-control-plane/envoy/config/route/v3"
 	envoy_matcher_v3 "github.com/envoyproxy/go-control-plane/envoy/type/matcher/v3"
+	envoy_type_v3 "github.com/envoyproxy/go-control-plane/envoy/type/v3"
 
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/durationpb"
@@ -597,6 +598,8 @@ func (s *ResourceGenerator) makeUpstreamRouteForDiscoveryChain(
 					routeAction.Route.RetryPolicy = getRetryPolicyForDestination(destination)
 				}
 
+				injectMirrorPoliciesToRouteAction(discoveryRoute.MirrorPolicy, routeAction, chain)
+
 				if err := injectHeaderManipToRoute(destination, route); err != nil {
 					return nil, fmt.Errorf("failed to apply header manipulation configuration to route: %v", err)
 				}
@@ -983,6 +986,26 @@ func injectLBToRouteAction(lb *structs.LoadBalancer, action *envoy_route_v3.Rout
 		}
 	}
 	action.HashPolicy = result
+	return nil
+}
+
+func injectMirrorPoliciesToRouteAction(mirrorPolicy *structs.DiscoveryMirrorPolicy, r *envoy_route_v3.Route_Route, chain *structs.CompiledDiscoveryChain) error {
+	if mirrorPolicy == nil {
+		return nil
+	}
+
+	targetID := chain.Nodes[mirrorPolicy.DestinationNode].Resolver.Target
+	target := chain.Targets[targetID]
+	targetName := CustomizeClusterName(target.Name, chain)
+
+	r.Route.RequestMirrorPolicies = append(r.Route.RequestMirrorPolicies, &envoy_route_v3.RouteAction_RequestMirrorPolicy{
+		Cluster: targetName,
+		RuntimeFraction: &envoy_core_v3.RuntimeFractionalPercent{
+			DefaultValue: &envoy_type_v3.FractionalPercent{
+				Numerator:   mirrorPolicy.Percent,
+			},
+		},
+	})
 	return nil
 }
 
