@@ -823,7 +823,11 @@ func TestParseConfigEntry(t *testing.T) {
 						  request_timeout          = "99s"
 						  num_retries              = 12345
 						  retry_on_connect_failure = true
-						  retry_on_status_codes    = [401, 209]
+						  retry_on_status_codes    = [401, 209],
+							mirror_policy {
+								service = "lettuce"
+								percent = 100
+							}
 						}
 					},
 					{
@@ -909,6 +913,10 @@ func TestParseConfigEntry(t *testing.T) {
 						  NumRetries            = 12345
 						  RetryOnConnectFailure = true
 						  RetryOnStatusCodes    = [401, 209]
+							MirrorPolicy {
+								Service = "lettuce"
+								Percent = 100
+							}
 						}
 					},
 					{
@@ -997,7 +1005,11 @@ func TestParseConfigEntry(t *testing.T) {
 							"retry_on_status_codes": [
 								401,
 								209
-							]
+							],
+							"mirror_policy": {
+								"service": "lettuce",
+								"percent": 100
+							}
 						}
 					},
 					{
@@ -1090,7 +1102,11 @@ func TestParseConfigEntry(t *testing.T) {
 							"RetryOnStatusCodes": [
 								401,
 								209
-							]
+							],
+							"MirrorPolicy": {
+								"Service": "lettuce",
+								"Percent": 100
+							}
 						}
 					},
 					{
@@ -1180,6 +1196,10 @@ func TestParseConfigEntry(t *testing.T) {
 							NumRetries:            12345,
 							RetryOnConnectFailure: true,
 							RetryOnStatusCodes:    []uint32{401, 209},
+							MirrorPolicy: &api.ServiceRouteDestinationMirror {
+								Service: "lettuce",
+								Percent: 100,
+							},
 						},
 					},
 					{
