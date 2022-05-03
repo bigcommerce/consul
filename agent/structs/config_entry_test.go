@@ -607,6 +607,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 						  num_retries            = 12345
 						  retry_on_connect_failure = true
 						  retry_on_status_codes    = [401, 209]
+							mirror_policy {
+								service = "banana"
+								service_subset = "apple"
+								percent = 25
+							}
 							request_headers {
 								add {
 									x-foo = "bar"
@@ -709,6 +714,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 						  NumRetries            = 12345
 						  RetryOnConnectFailure = true
 						  RetryOnStatusCodes    = [401, 209]
+							MirrorPolicy {
+								Service = "banana"
+								ServiceSubset = "apple"
+								Percent = 25
+							}
 							RequestHeaders {
 								Add {
 									x-foo = "bar"
@@ -811,6 +821,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 							NumRetries:            12345,
 							RetryOnConnectFailure: true,
 							RetryOnStatusCodes:    []uint32{401, 209},
+							MirrorPolicy: &ServiceRouteDestinationMirror{
+								Service: "banana",
+								ServiceSubset: "apple",
+								Percent: 25,
+							},
 							RequestHeaders: &HTTPHeaderModifiers{
 								Add:    map[string]string{"x-foo": "bar"},
 								Set:    map[string]string{"bar": "baz"},
