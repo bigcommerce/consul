@@ -764,6 +764,18 @@ func setupTestVariationDiscoveryChain(
 							},
 						},
 					},
+					{
+						Match: httpMatch(&structs.ServiceRouteHTTPMatch{
+							PathPrefix: "/mirror",
+						}),
+						Destination: &structs.ServiceRouteDestination{
+							Service: "original-destination",
+							MirrorPolicy: &structs.ServiceRouteDestinationMirror{
+								Service: "mirror-destination",
+								Percent: 25,
+							},
+						},
+					},
 				},
 			},
 		)

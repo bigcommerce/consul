@@ -155,8 +155,14 @@ func (r *DiscoveryResolver) UnmarshalJSON(data []byte) error {
 
 // compiled form of ServiceRoute
 type DiscoveryRoute struct {
-	Definition *ServiceRoute `json:",omitempty"`
-	NextNode   string        `json:",omitempty"`
+	Definition   *ServiceRoute          `json:",omitempty"`
+	MirrorPolicy *DiscoveryMirrorPolicy `json:",omitempty"`
+	NextNode     string                 `json:",omitempty"`
+}
+
+type DiscoveryMirrorPolicy struct {
+	DestinationNode string `json:",omitempty"`
+	Percent         uint32 `json:",omitempty"`
 }
 
 // compiled form of ServiceSplit

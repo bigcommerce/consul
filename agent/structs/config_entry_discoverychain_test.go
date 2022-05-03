@@ -2032,6 +2032,63 @@ func TestServiceRouterConfigEntry(t *testing.T) {
 			}),
 			validateErr: "cannot make use of PrefixRewrite without configuring either PathExact or PathPrefix",
 		},
+		/////////////////
+		// mirror with service
+		{
+			name: "route traffic mirror",
+			entry: makerouter(ServiceRoute{
+				Match: httpMatch(&ServiceRouteHTTPMatch{
+					PathPrefix: "/",
+				}),
+				Destination: &ServiceRouteDestination{
+					Service: "other",
+					MirrorPolicy: &ServiceRouteDestinationMirror{
+						Service:       "mirror-to",
+						ServiceSubset: "v2",
+						Percent:       11,
+					},
+				},
+			}),
+			check: func(t *testing.T, entry *ServiceRouterConfigEntry) {
+				dm := entry.Routes[0].Destination.MirrorPolicy
+				require.Equal(t, "mirror-to", dm.Service)
+				require.Equal(t, "v2", dm.ServiceSubset)
+				require.Equal(t, uint32(11), dm.Percent)
+			},
+		},
+		{
+			name: "route traffic mirror without destination",
+			entry: makerouter(ServiceRoute{
+				Match: httpMatchParam(ServiceRouteHTTPMatchQueryParam{
+					Name:  "foo",
+					Exact: "bar",
+				}),
+				Destination: &ServiceRouteDestination{
+					Service: "other",
+					MirrorPolicy: &ServiceRouteDestinationMirror{
+						Percent: 11,
+					},
+				},
+			}),
+			validateErr: "service to mirror traffic to is required",
+		},
+		{
+			name: "route traffic mirror with invalid mirror percent",
+			entry: makerouter(ServiceRoute{
+				Match: httpMatchParam(ServiceRouteHTTPMatchQueryParam{
+					Name:  "foo",
+					Exact: "bar",
+				}),
+				Destination: &ServiceRouteDestination{
+					Service: "other",
+					MirrorPolicy: &ServiceRouteDestinationMirror{
+						Service: "mirror-to",
+						Percent: 150,
+					},
+				},
+			}),
+			validateErr: "percent of traffic to mirror must be between 0 and 100",
+		},
 		////////////////
 		{
 			name: "route with method matches",

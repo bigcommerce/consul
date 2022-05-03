@@ -234,6 +234,12 @@ func (e *ServiceRouterConfigEntry) Validate() error {
 					return fmt.Errorf("Route[%d] contains an invalid retry condition: %q", i, r)
 				}
 			}
+
+			if route.Destination.MirrorPolicy != nil {
+				if err := route.Destination.MirrorPolicy.Validate(); err != nil {
+					return fmt.Errorf("Route[%d] has invalid mirror policy: %s", i, err)
+				}
+			}
 		}
 	}
 
@@ -450,6 +456,9 @@ type ServiceRouteDestination struct {
 	// Allow HTTP header manipulation to be configured.
 	RequestHeaders  *HTTPHeaderModifiers `json:",omitempty" alias:"request_headers"`
 	ResponseHeaders *HTTPHeaderModifiers `json:",omitempty" alias:"response_headers"`
+
+	// MirrorPolicy allows for traffic to this destination to be mirrored elsewhere
+	MirrorPolicy *ServiceRouteDestinationMirror `json:",omitempty" alias:"mirror_policy"`
 }
 
 func (e *ServiceRouteDestination) MarshalJSON() ([]byte, error) {
@@ -502,6 +511,30 @@ func (e *ServiceRouteDestination) UnmarshalJSON(data []byte) error {
 
 func (d *ServiceRouteDestination) HasRetryFeatures() bool {
 	return d.NumRetries > 0 || d.RetryOnConnectFailure || len(d.RetryOnStatusCodes) > 0 || len(d.RetryOn) > 0
+}
+
+// ServiceRouteDestinationMirrors allow traffic to a destination service
+// to be mirrored to another service, where the reply will be discarded.
+//
+// Optionally, a percentage of traffic can be mirrored.
+type ServiceRouteDestinationMirror struct {
+	Service       string `json:",omitempty"`
+	Namespace     string `json:",omitempty"`
+	Partion       string `json:",omitempty"`
+	ServiceSubset string `json:",omitempty" alias:"service_subset"`
+	Percent       uint32 `json:",omitempty" alias:"percent"`
+}
+
+func (e *ServiceRouteDestinationMirror) Validate() error {
+	if e.Service == "" {
+		return fmt.Errorf("service to mirror traffic to is required")
+	}
+
+	if e.Percent < 0 || e.Percent > 100 {
+		return fmt.Errorf("percent of traffic to mirror must be between 0 and 100. got %d", e.Percent)
+	}
+
+	return nil
 }
 
 // ServiceSplitterConfigEntry defines how incoming requests are split across

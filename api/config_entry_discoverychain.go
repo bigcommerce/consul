@@ -63,19 +63,30 @@ type ServiceRouteHTTPMatchQueryParam struct {
 }
 
 type ServiceRouteDestination struct {
-	Service               string               `json:",omitempty"`
-	ServiceSubset         string               `json:",omitempty" alias:"service_subset"`
-	Namespace             string               `json:",omitempty"`
-	Partition             string               `json:",omitempty"`
-	PrefixRewrite         string               `json:",omitempty" alias:"prefix_rewrite"`
-	RequestTimeout        time.Duration        `json:",omitempty" alias:"request_timeout"`
-	IdleTimeout           time.Duration        `json:",omitempty" alias:"idle_timeout"`
-	NumRetries            uint32               `json:",omitempty" alias:"num_retries"`
-	RetryOnConnectFailure bool                 `json:",omitempty" alias:"retry_on_connect_failure"`
-	RetryOnStatusCodes    []uint32             `json:",omitempty" alias:"retry_on_status_codes"`
-	RetryOn               []string             `json:",omitempty" alias:"retry_on"`
-	RequestHeaders        *HTTPHeaderModifiers `json:",omitempty" alias:"request_headers"`
-	ResponseHeaders       *HTTPHeaderModifiers `json:",omitempty" alias:"response_headers"`
+	Service               string                         `json:",omitempty"`
+	ServiceSubset         string                         `json:",omitempty" alias:"service_subset"`
+	Namespace             string                         `json:",omitempty"`
+	Partition             string                         `json:",omitempty"`
+	PrefixRewrite         string                         `json:",omitempty" alias:"prefix_rewrite"`
+	RequestTimeout        time.Duration                  `json:",omitempty" alias:"request_timeout"`
+	IdleTimeout           time.Duration                  `json:",omitempty" alias:"idle_timeout"`
+	NumRetries            uint32                         `json:",omitempty" alias:"num_retries"`
+	RetryOnConnectFailure bool                           `json:",omitempty" alias:"retry_on_connect_failure"`
+	RetryOnStatusCodes    []uint32                       `json:",omitempty" alias:"retry_on_status_codes"`
+	RetryOn               []string                       `json:",omitempty" alias:"retry_on"`
+	RequestHeaders        *HTTPHeaderModifiers           `json:",omitempty" alias:"request_headers"`
+	ResponseHeaders       *HTTPHeaderModifiers           `json:",omitempty" alias:"response_headers"`
+	MirrorPolicy          *ServiceRouteDestinationMirror `json:",omitempty" alias:"mirror_policy"`
+}
+
+type ServiceRouteDestinationMirror struct {
+	// Defaults to destination if not specified
+	Service   string `json:",omitempty"`
+	Namespace string `json:",omitempty"`
+	Partition string `json:",omitempty"`
+	// Further limiting
+	ServiceSubset string `json:",omitempty" alias:"service_subset"`
+	Percent       uint32 `json:",omitempty" alias:"percent"`
 }
 
 func (e *ServiceRouteDestination) MarshalJSON() ([]byte, error) {

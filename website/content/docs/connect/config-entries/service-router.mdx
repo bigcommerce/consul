@@ -399,6 +399,84 @@ spec:
 ```
 </CodeTabs>
 
+### Traffic Mirroring
+
+Mirror traffic matching this route to another service, discarding the reply. Review the [`ServiceRouteDestinationMirror`](#serviceroutedestinationmirror) block for more details.
+
+<CodeTabs tabs={[ "HCL", "Kubernetes YAML", "JSON" ]}>
+
+
+```hcl
+Kind = "service-router"
+Name = "catalog"
+Routes = [
+  {
+    Match{
+        HTTP {
+            Methods = ["GET"]
+            PathPrefix = "/catalog"
+        }
+    }
+
+    Destination {
+        Service = "catalog"
+        MirrorPolicy {
+            Service = "catalog-testing"
+            Percent = 25
+        }
+    }
+  }
+]
+```
+
+```yaml
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceRouter
+metadata:
+  name: catalog
+spec:
+  routes:
+    - match:
+        http:
+          pathPrefix: /catalog
+          methods:
+            - GET
+      destination:
+        service: catalog
+        mirror_policy {
+          service = "catalog-testing"
+          percent = 25
+        }
+
+```
+
+
+```json
+{
+    "Kind": "service-router",
+    "Name": "catalog",
+    "Routes": [
+        {
+            "Match": {
+                "HTTP": {
+                    "PathPrefix": "/catalog"
+                    "Methods": ["GET"]
+                }
+            },
+            "Destination": {
+                "Service": "catalog",
+                "MirrorPolicy": {
+                  "Service": "catalog-testing"
+                  "Percent": 25
+                }
+            }
+        }
+    ]
+}
+
+```
+</CodeTabs>
+
 ## Available Fields
 
 <ConfigEntryReference
@@ -740,6 +818,13 @@ spec:
       that will be applied to responses from this service.
       This cannot be used with a \`tcp\` listener.`,
     },
+    {
+      name: 'MirrorPolicy',
+      type: 'ServiceRouteDestinationMirror: <optional>',
+      description: `A [traffic mirroring policy](/docs/connect/config-entries/service-router#serviceroutedestinationmirror) to allow
+      a percentage of traffic matching this route to be mirrored to another service (replies are discarded)
+      This cannot be used with a \`tcp\` listener.`,
+    },
   ]}
 />
 
@@ -777,6 +862,44 @@ spec:
       type: 'array<string>: optional',
       description: `The set of header names to remove. Only headers
       whose names are a <i>case-insensitive</i> exact match will be removed`,
+    },
+  ]}
+/>
+
+### `ServiceRouteDestinationMirror`
+
+<ConfigEntryReference
+  topLevel={false}
+  keys={[
+    {
+      name: 'Service',
+      type: 'string: ""',
+      description:
+        'The service to mirror traffic to.',
+    },
+    {
+      name: 'ServiceSubset',
+      type: 'string: ""',
+      description: 'A named subset of the given service to mirror traffic to.',
+    },
+    {
+      name: 'Namespace',
+      type: 'string: ""',
+      description:
+        'The Consul namespace to resolve the mirror service from instead of the current namespace. If empty, the current namespace is used.',
+      enterprise: true,
+    },
+    {
+      name: 'Partition',
+      type: 'string: ""',
+      description:
+        'The Consul admin partition to resolve the mirror service from instead of the current partition. If empty, the current partition is used.',
+      enterprise: true,
+    },
+    {
+      name: 'Percent',
+      type: 'int: 100',
+      description: 'The percentage of traffic to be mirrored to this service',
     },
   ]}
 />

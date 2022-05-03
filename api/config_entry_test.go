@@ -615,7 +615,12 @@ func TestDecodeConfigEntry(t *testing.T) {
 						  "IdleTimeout": "99s",
 						  "NumRetries": 12345,
 						  "RetryOnConnectFailure": true,
-						  "RetryOnStatusCodes": [401, 209]
+						  "RetryOnStatusCodes": [401, 209],
+							"MirrorPolicy": {
+								"Service": "pandan",
+								"ServiceSubset": "grapefruit",
+								"Percent": 25
+							}
 						}
 					},
 					{
@@ -701,6 +706,11 @@ func TestDecodeConfigEntry(t *testing.T) {
 							NumRetries:            12345,
 							RetryOnConnectFailure: true,
 							RetryOnStatusCodes:    []uint32{401, 209},
+							MirrorPolicy: &ServiceRouteDestinationMirror{
+								Service:       "pandan",
+								ServiceSubset: "grapefruit",
+								Percent:       25,
+							},
 						},
 					},
 					{

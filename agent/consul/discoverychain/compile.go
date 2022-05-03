@@ -521,6 +521,9 @@ func (c *compiler) removeUnusedNodes() error {
 		case structs.DiscoveryGraphNodeTypeRouter:
 			for _, route := range node.Routes {
 				todo[route.NextNode] = struct{}{}
+				if route.MirrorPolicy != nil {
+					todo[route.MirrorPolicy.DestinationNode] = struct{}{}
+				}
 			}
 		case structs.DiscoveryGraphNodeTypeSplitter:
 			for _, split := range node.Splits {
@@ -625,8 +628,9 @@ func (c *compiler) assembleChain() error {
 
 		// Check to see if the destination is eligible for splitting.
 		var (
-			node *structs.DiscoveryGraphNode
-			err  error
+			node       *structs.DiscoveryGraphNode
+			mirrorNode *structs.DiscoveryGraphNode
+			err        error
 		)
 		if dest.ServiceSubset == "" {
 			node, err = c.getSplitterOrResolverNode(
@@ -650,6 +654,40 @@ func (c *compiler) assembleChain() error {
 		if err != nil {
 			return err
 		}
+
+		// Check to see if traffic to this destination should be mirrored to another service
+		if dest.MirrorPolicy != nil {
+			mirrorNamespace := defaultIfEmpty(dest.MirrorPolicy.Namespace, destNamespace)
+			mirrorPartition := defaultIfEmpty(dest.MirrorPolicy.Partion, destPartition)
+			if dest.MirrorPolicy.ServiceSubset == "" {
+				mirrorNode, err = c.getSplitterOrResolverNode(
+					c.newTarget(structs.DiscoveryTargetOpts{
+						Service: dest.MirrorPolicy.Service,
+						Namespace: mirrorNamespace,
+						Partition: mirrorPartition,
+					}),
+				)
+			} else {
+				mirrorNode, err = c.getResolverNode(
+					c.newTarget(structs.DiscoveryTargetOpts{
+						Service: dest.MirrorPolicy.Service,
+						ServiceSubset: dest.MirrorPolicy.ServiceSubset,
+						Namespace: mirrorNamespace,
+						Partition: mirrorPartition,
+					}),
+					false,
+				)
+			}
+			if err != nil {
+				return err
+			}
+
+			compiledRoute.MirrorPolicy = &structs.DiscoveryMirrorPolicy{
+				DestinationNode: mirrorNode.MapKey(),
+				Percent:         dest.MirrorPolicy.Percent,
+			}
+		}
+
 		compiledRoute.NextNode = node.MapKey()
 	}
 
