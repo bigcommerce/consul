@@ -60,6 +60,7 @@ func TestCompile(t *testing.T) {
 		"default resolver with proxy defaults":             testcase_DefaultResolver_WithProxyDefaults(),
 		"loadbalancer splitter and resolver":               testcase_LBSplitterAndResolver(),
 		"loadbalancer resolver":                            testcase_LBResolver(),
+		"router with traffic mirroring":                    testcase_RouterWithMirrorPolicy(),
 		"service redirect to service with default resolver is not a default chain": testcase_RedirectToDefaultResolverIsNotDefaultChain(),
 		"extensions":                            testcase_Extensions(),
 		"service meta projection":               testcase_ServiceMetaProjection(),
@@ -3212,6 +3213,139 @@ func testcase_ServiceDefaultsOverrideTProxy() compileTestCase {
 			"main.default.default.dc1": newTarget(structs.DiscoveryTargetOpts{Service: "main"}, func(t *structs.DiscoveryTarget) {
 				t.TransparentProxy.DialedDirectly = true
 			}),
+		},
+	}
+	return compileTestCase{entries: entries, expect: expect}
+}
+
+func testcase_RouterWithMirrorPolicy() compileTestCase {
+	entries := newEntries()
+	setServiceProtocol(entries, "main", "http")
+	setServiceProtocol(entries, "mirror-source", "http")
+	setServiceProtocol(entries, "mirror-dest", "http")
+	setServiceProtocol(entries, "mirror-source-subset", "http")
+
+	entries.AddResolvers(
+		&structs.ServiceResolverConfigEntry{
+			Kind: "service-resolver",
+			Name: "mirror-dest",
+			Subsets: map[string]structs.ServiceResolverSubset{
+				"v1": {
+					Filter: "Service.Meta.version == 1",
+				},
+				"v2": {
+					Filter: "Service.Meta.version == 2",
+				},
+			},
+		},
+	)
+
+	entries.AddRouters(
+		&structs.ServiceRouterConfigEntry{
+			Kind: "service-router",
+			Name: "main",
+			Routes: []structs.ServiceRoute{
+				newSimpleRoute("mirror-source", func(r *structs.ServiceRoute) {
+					r.Destination.MirrorPolicy = &structs.ServiceRouteDestinationMirror{
+						Service: "mirror-dest",
+					}
+				}),
+				newSimpleRoute("mirror-source-subset", func(r *structs.ServiceRoute) {
+					r.Destination.MirrorPolicy = &structs.ServiceRouteDestinationMirror{
+						Service:       "mirror-dest",
+						ServiceSubset: "v2",
+					}
+				}),
+			},
+		},
+	)
+
+	router := entries.GetRouter(structs.NewServiceID("main", nil))
+	expect := &structs.CompiledDiscoveryChain{
+		Protocol:  "http",
+		StartNode: "router:main.default.default",
+		Nodes: map[string]*structs.DiscoveryGraphNode{
+			"resolver:main.default.default.dc1": {
+				Type: structs.DiscoveryGraphNodeTypeResolver,
+				Name: "main.default.default.dc1",
+				Resolver: &structs.DiscoveryResolver{
+					Default:        true,
+					ConnectTimeout: 5 * time.Second,
+					Target:         "main.default.default.dc1",
+				},
+			},
+			"router:main.default.default": {
+				Type: structs.DiscoveryGraphNodeTypeRouter,
+				Name: "main.default.default",
+				Routes: []*structs.DiscoveryRoute{
+					{
+						Definition: &router.Routes[0],
+						NextNode:   "resolver:mirror-source.default.default.dc1",
+						MirrorPolicy: &structs.DiscoveryMirrorPolicy{
+							DestinationNode: "resolver:mirror-dest.default.default.dc1",
+							Percent:         0,
+						},
+					},
+					{
+						Definition: &router.Routes[1],
+						NextNode:   "resolver:mirror-source-subset.default.default.dc1",
+						MirrorPolicy: &structs.DiscoveryMirrorPolicy{
+							DestinationNode: "resolver:v2.mirror-dest.default.default.dc1",
+							Percent:         0,
+						},
+					},
+					{
+						Definition: newDefaultServiceRoute("main", "default", "default"),
+						NextNode:   "resolver:main.default.default.dc1",
+					},
+				},
+			},
+			"resolver:mirror-dest.default.default.dc1": {
+				Type: structs.DiscoveryGraphNodeTypeResolver,
+				Name: "mirror-dest.default.default.dc1",
+				Resolver: &structs.DiscoveryResolver{
+					ConnectTimeout: 5 * time.Second,
+					Target:         "mirror-dest.default.default.dc1",
+				},
+			},
+			"resolver:v2.mirror-dest.default.default.dc1": {
+				Type: structs.DiscoveryGraphNodeTypeResolver,
+				Name: "v2.mirror-dest.default.default.dc1",
+				Resolver: &structs.DiscoveryResolver{
+					ConnectTimeout: 5 * time.Second,
+					Target:         "v2.mirror-dest.default.default.dc1",
+				},
+			},
+			"resolver:mirror-source-subset.default.default.dc1": {
+				Type: structs.DiscoveryGraphNodeTypeResolver,
+				Name: "mirror-source-subset.default.default.dc1",
+				Resolver: &structs.DiscoveryResolver{
+					Default:        true,
+					ConnectTimeout: 5 * time.Second,
+					Target:         "mirror-source-subset.default.default.dc1",
+				},
+			},
+			"resolver:mirror-source.default.default.dc1": {
+				Type: structs.DiscoveryGraphNodeTypeResolver,
+				Name: "mirror-source.default.default.dc1",
+				Resolver: &structs.DiscoveryResolver{
+					Default:        true,
+					ConnectTimeout: 5 * time.Second,
+					Target:         "mirror-source.default.default.dc1",
+				},
+			},
+		},
+
+		Targets: map[string]*structs.DiscoveryTarget{
+			"main.default.default.dc1":          newTarget(structs.DiscoveryTargetOpts{Service: "main"}, nil),
+			"mirror-source.default.default.dc1": newTarget(structs.DiscoveryTargetOpts{Service: "mirror-source"}, nil),
+			"mirror-dest.default.default.dc1":   newTarget(structs.DiscoveryTargetOpts{Service: "mirror-dest"}, nil),
+			"v2.mirror-dest.default.default.dc1": newTarget(structs.DiscoveryTargetOpts{Service: "mirror-dest", ServiceSubset: "v2"}, func(t *structs.DiscoveryTarget) {
+				t.Subset = structs.ServiceResolverSubset{
+					Filter: "Service.Meta.version == 2",
+				}
+			}),
+			"mirror-source-subset.default.default.dc1": newTarget(structs.DiscoveryTargetOpts{Service: "mirror-source-subset"}, nil),
 		},
 	}
 	return compileTestCase{entries: entries, expect: expect}
