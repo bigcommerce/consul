@@ -106,7 +106,12 @@
                 ],
                 "tracing":  {
                   "randomSampling":  {}
-                }
+                },
+                "upgradeConfigs":  [
+                  {
+                    "upgradeType":  "websocket"
+                  }
+                ]
               }
             }
           ],

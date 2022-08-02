@@ -49,6 +49,11 @@
                   {
                     "name":  "envoy.filters.http.router"
                   }
+                ],
+                "upgradeConfigs":  [
+                  {
+                    "upgradeType":  "websocket"
+                  }
                 ]
               }
             }
