@@ -271,8 +271,8 @@
               },
               "route": {
                 "cluster": "prefix-rewrite-1.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-                "timeout": "0s",
-                "prefixRewrite": "/"
+                "prefixRewrite": "/",
+                "timeout": "0s"
               }
             },
             {
@@ -281,8 +281,8 @@
               },
               "route": {
                 "cluster": "prefix-rewrite-2.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-                "timeout": "0s",
-                "prefixRewrite": "/nested/newlocation"
+                "prefixRewrite": "/nested/newlocation",
+                "timeout": "0s"
               }
             },
             {
@@ -291,7 +291,6 @@
               },
               "route": {
                 "cluster": "req-timeout.default.dc1.internal.11111111-2222-3333-4444-555555555555.consul",
-                "timeout": "0s",
                 "timeout": "33s"
               }
             },
@@ -348,7 +347,6 @@
                 "prefix": "/split-3-ways"
               },
               "route": {
-                "timeout": "0s",
                 "weightedClusters": {
                   "clusters": [
                     {
@@ -365,7 +363,8 @@
                     }
                   ],
                   "totalWeight": 10000
-                }
+                },
+                "timeout": "0s"
               }
             },
             {
