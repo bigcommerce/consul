@@ -1105,12 +1105,12 @@ func (s *ResourceGenerator) makeFilterChainTerminatingGateway(
 	// HTTP filter to do intention checks here instead.
 	timeout := 0
 	opts := listenerFilterOpts{
-		protocol:   protocol,
-		filterName: fmt.Sprintf("%s.%s.%s.%s", service.Name, service.NamespaceOrDefault(), service.PartitionOrDefault(), cfgSnap.Datacenter),
-		routeName:  cluster, // Set cluster name for route config since each will have its own
-		cluster:    cluster,
-		statPrefix: "upstream.",
-		routePath:  "",
+		protocol:         protocol,
+		filterName:       fmt.Sprintf("%s.%s.%s.%s", service.Name, service.NamespaceOrDefault(), service.PartitionOrDefault(), cfgSnap.Datacenter),
+		routeName:        cluster, // Set cluster name for route config since each will have its own
+		cluster:          cluster,
+		statPrefix:       "upstream.",
+		routePath:        "",
 		requestTimeoutMs: &timeout,
 	}
 
@@ -1254,12 +1254,12 @@ type filterChainOpts struct {
 func (s *ResourceGenerator) makeUpstreamFilterChain(opts filterChainOpts) (*envoy_listener_v3.FilterChain, error) {
 	timeout := 0
 	filter, err := makeListenerFilter(listenerFilterOpts{
-		useRDS:     opts.useRDS,
-		protocol:   opts.protocol,
-		filterName: opts.filterName,
-		routeName:  opts.routeName,
-		cluster:    opts.clusterName,
-		statPrefix: "upstream.",
+		useRDS:           opts.useRDS,
+		protocol:         opts.protocol,
+		filterName:       opts.filterName,
+		routeName:        opts.routeName,
+		cluster:          opts.clusterName,
+		statPrefix:       "upstream.",
 		requestTimeoutMs: &timeout,
 	})
 	if err != nil {
@@ -1409,6 +1409,11 @@ func makeHTTPFilter(opts listenerFilterOpts) (*envoy_listener_v3.Filter, error) 
 		HttpFilters: []*envoy_http_v3.HttpFilter{
 			{
 				Name: "envoy.filters.http.router",
+			},
+		},
+		UpgradeConfigs: []*envoy_http_v3.HttpConnectionManager_UpgradeConfig{
+			{
+				UpgradeType: "websocket",
 			},
 		},
 		Tracing: &envoy_http_v3.HttpConnectionManager_Tracing{

@@ -16,7 +16,6 @@
                 "prefix": "/"
               },
               "route": {
-                "timeout": "0s",
                 "weightedClusters": {
                   "clusters": [
                     {
@@ -30,6 +29,7 @@
                   ],
                   "totalWeight": 10000
                 },
+                "timeout": "0s",
                 "hashPolicy": [
                   {
                     "cookie": {
