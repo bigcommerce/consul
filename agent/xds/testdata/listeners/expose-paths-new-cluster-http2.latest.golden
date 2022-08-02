@@ -50,7 +50,12 @@
                 "tracing":  {
                   "randomSampling":  {}
                 },
-                "http2ProtocolOptions":  {}
+                "http2ProtocolOptions":  {},
+                "upgradeConfigs":  [
+                  {
+                    "upgradeType":  "websocket"
+                  }
+                ]
               }
             }
           ]
@@ -106,7 +111,12 @@
                 ],
                 "tracing":  {
                   "randomSampling":  {}
-                }
+                },
+                "upgradeConfigs":  [
+                  {
+                    "upgradeType":  "websocket"
+                  }
+                ]
               }
             }
           ]
