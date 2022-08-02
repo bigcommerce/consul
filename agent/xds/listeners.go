@@ -1644,13 +1644,13 @@ func (s *ResourceGenerator) makeFilterChainTerminatingGateway(cfgSnap *proxycfg.
 	// HTTP filter to do intention checks here instead.
 	timeout := 0
 	opts := listenerFilterOpts{
-		protocol:   tgtwyOpts.protocol,
-		filterName: fmt.Sprintf("%s.%s.%s.%s", tgtwyOpts.service.Name, tgtwyOpts.service.NamespaceOrDefault(), tgtwyOpts.service.PartitionOrDefault(), cfgSnap.Datacenter),
-		routeName:  tgtwyOpts.cluster, // Set cluster name for route config since each will have its own
-		cluster:    tgtwyOpts.cluster,
-		statPrefix: "upstream.",
-		routePath:  "",
-		tracing:    tracing,
+		protocol:         tgtwyOpts.protocol,
+		filterName:       fmt.Sprintf("%s.%s.%s.%s", tgtwyOpts.service.Name, tgtwyOpts.service.NamespaceOrDefault(), tgtwyOpts.service.PartitionOrDefault(), cfgSnap.Datacenter),
+		routeName:        tgtwyOpts.cluster, // Set cluster name for route config since each will have its own
+		cluster:          tgtwyOpts.cluster,
+		statPrefix:       "upstream.",
+		routePath:        "",
+		tracing:          tracing,
 		requestTimeoutMs: &timeout,
 	}
 
@@ -2208,6 +2208,11 @@ func makeHTTPFilter(opts listenerFilterOpts) (*envoy_listener_v3.Filter, error) 
 		CodecType:  envoy_http_v3.HttpConnectionManager_AUTO,
 		HttpFilters: []*envoy_http_v3.HttpFilter{
 			router,
+		},
+		UpgradeConfigs: []*envoy_http_v3.HttpConnectionManager_UpgradeConfig{
+			{
+				UpgradeType: "websocket",
+			},
 		},
 		Tracing: &envoy_http_v3.HttpConnectionManager_Tracing{
 			// Don't trace any requests by default unless the client application
