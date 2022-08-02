@@ -409,7 +409,7 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+			CircuitBreakers: &envoy_cluster_v3.CircuitBreakers{
 				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
 					&envoy_cluster_v3.CircuitBreakers_Thresholds{
 						MaxConnections: makeUint32Value(4096),
@@ -433,7 +433,7 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+			CircuitBreakers: &envoy_cluster_v3.CircuitBreakers{
 				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
 					&envoy_cluster_v3.CircuitBreakers_Thresholds{
 						MaxConnections: makeUint32Value(4096),
@@ -457,7 +457,7 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+			CircuitBreakers: &envoy_cluster_v3.CircuitBreakers{
 				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
 					&envoy_cluster_v3.CircuitBreakers_Thresholds{
 						MaxConnections: makeUint32Value(4096),
@@ -496,7 +496,7 @@ func makeTestCluster(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName st
 			EdsClusterConfig: &envoy_cluster_v3.Cluster_EdsClusterConfig{
 				EdsConfig: xdsNewADSConfig(),
 			},
-			CircuitBreakers:  &envoy_cluster_v3.CircuitBreakers{
+			CircuitBreakers: &envoy_cluster_v3.CircuitBreakers{
 				Thresholds: []*envoy_cluster_v3.CircuitBreakers_Thresholds{
 					&envoy_cluster_v3.CircuitBreakers_Thresholds{
 						MaxConnections: makeUint32Value(4096),
@@ -666,6 +666,11 @@ func makeTestListener(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName s
 							HttpFilters: []*envoy_http_v3.HttpFilter{
 								xdsNewHttpFilter(t, "envoy.filters.http.router", &envoy_http_router_v3.Router{}),
 							},
+							UpgradeConfigs: []*envoy_http_v3.HttpConnectionManager_UpgradeConfig{
+								{
+									UpgradeType: "websocket",
+								},
+							},
 							RouteSpecifier: &envoy_http_v3.HttpConnectionManager_RouteConfig{
 								RouteConfig: makeTestRoute(t, "http2:db:inline"),
 							},
@@ -690,6 +695,11 @@ func makeTestListener(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName s
 						xdsNewFilter(t, "envoy.filters.network.http_connection_manager", &envoy_http_v3.HttpConnectionManager{
 							HttpFilters: []*envoy_http_v3.HttpFilter{
 								xdsNewHttpFilter(t, "envoy.filters.http.router", &envoy_http_router_v3.Router{}),
+							},
+							UpgradeConfigs: []*envoy_http_v3.HttpConnectionManager_UpgradeConfig{
+								{
+									UpgradeType: "websocket",
+								},
 							},
 							RouteSpecifier: &envoy_http_v3.HttpConnectionManager_Rds{
 								Rds: &envoy_http_v3.Rds{
@@ -718,6 +728,11 @@ func makeTestListener(t *testing.T, snap *proxycfg.ConfigSnapshot, fixtureName s
 						xdsNewFilter(t, "envoy.filters.network.http_connection_manager", &envoy_http_v3.HttpConnectionManager{
 							HttpFilters: []*envoy_http_v3.HttpFilter{
 								xdsNewHttpFilter(t, "envoy.filters.http.router", &envoy_http_router_v3.Router{}),
+							},
+							UpgradeConfigs: []*envoy_http_v3.HttpConnectionManager_UpgradeConfig{
+								{
+									UpgradeType: "websocket",
+								},
 							},
 							RouteSpecifier: &envoy_http_v3.HttpConnectionManager_Rds{
 								Rds: &envoy_http_v3.Rds{
