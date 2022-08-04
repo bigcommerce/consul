@@ -1466,6 +1466,12 @@ const customHTTPListenerJSONTpl = `{
 								"name": "envoy.filters.http.router"
 							}
 						],
+						"upgrade_configs": [
+							{
+								"upgrade_type": "websocket"
+							}
+						],
+
 						"route_config": {
 							"name": "public_listener",
 							"virtual_hosts": [
