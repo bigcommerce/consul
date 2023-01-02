@@ -65,7 +65,7 @@ require (
 	github.com/joyent/triton-go v1.7.1-0.20200416154420-6801d15b779f // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/text v0.2.0
-	github.com/miekg/dns v1.1.41
+	github.com/miekg/dns v1.1.50
 	github.com/mitchellh/cli v1.1.0
 	github.com/mitchellh/copystructure v1.0.0
 	github.com/mitchellh/go-testing-interface v1.14.0
