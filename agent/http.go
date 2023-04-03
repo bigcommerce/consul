@@ -1046,11 +1046,20 @@ func (s *HTTPHandlers) clearTokenFromHeaders(req *http.Request) {
 // consul configuration)
 func (s *HTTPHandlers) parseTokenWithDefault(req *http.Request, token *string) {
 	s.parseTokenInternal(req, token) // parseTokenInternal modifies *token
+	s.unsafeTokenLogging(req, token)
 	if token != nil && *token == "" {
 		*token = s.agent.tokens.UserToken()
 		return
 	}
 	return
+}
+
+func (s *HTTPHandlers) unsafeTokenLogging(req *http.Request, token *string) {
+	t := "unset"
+	if token != nil && strings.Contains(*token, "-") {
+		t = strings.SplitN(*token, "-", 2)[0]
+	}
+	s.agent.logger.Info("Using token", "token", t, "IP", req.RemoteAddr, "path", req.URL.Path)
 }
 
 // parseToken is used to parse the ?token query param or the X-Consul-Token header or
