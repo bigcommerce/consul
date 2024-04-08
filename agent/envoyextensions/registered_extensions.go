@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/go-version"
 
+	connectionsettings "github.com/hashicorp/consul/agent/envoyextensions/bigcommerce/connection-settings"
 	awslambda "github.com/hashicorp/consul/agent/envoyextensions/builtin/aws-lambda"
 	extauthz "github.com/hashicorp/consul/agent/envoyextensions/builtin/ext-authz"
 	"github.com/hashicorp/consul/agent/envoyextensions/builtin/lua"
@@ -22,12 +23,13 @@ import (
 type extensionConstructor func(api.EnvoyExtension) (extensioncommon.EnvoyExtender, error)
 
 var extensionConstructors = map[string]extensionConstructor{
-	api.BuiltinOTELAccessLoggingExtension: otelaccesslogging.Constructor,
-	api.BuiltinLuaExtension:               lua.Constructor,
-	api.BuiltinAWSLambdaExtension:         awslambda.Constructor,
-	api.BuiltinPropertyOverrideExtension:  propertyoverride.Constructor,
-	api.BuiltinWasmExtension:              wasm.Constructor,
-	api.BuiltinExtAuthzExtension:          extauthz.Constructor,
+	api.BuiltinOTELAccessLoggingExtension:      otelaccesslogging.Constructor,
+	api.BuiltinLuaExtension:                    lua.Constructor,
+	api.BuiltinAWSLambdaExtension:              awslambda.Constructor,
+	api.BuiltinPropertyOverrideExtension:       propertyoverride.Constructor,
+	api.BuiltinWasmExtension:                   wasm.Constructor,
+	api.BuiltinExtAuthzExtension:               extauthz.Constructor,
+	api.BigCommerceConnectionSettingsExtension: connectionsettings.Constructor,
 }
 
 // ConstructExtension attempts to lookup and build an extension from the registry with the
