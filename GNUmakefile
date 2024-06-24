@@ -67,7 +67,7 @@ CONSUL_IMAGE_VERSION?=latest
 # When changing the method of Go version detection, also update
 # version detection in CI workflows (reusable-get-go-version.yml).
 GOLANG_VERSION?=$(shell head -n 1 .go-version)
-ENVOY_VERSION?='1.25.4'
+ENVOY_VERSION?='1.29.5'
 
 ################
 # CI Variables #
@@ -208,7 +208,7 @@ remote-docker: check-remote-dev-image-env
 	@echo "Building and Pushing Consul Development container - $(REMOTE_DEV_IMAGE)"
 	@if ! docker buildx inspect consul-builder; then \
 		docker buildx create --name consul-builder --driver docker-container --bootstrap; \
-	fi; 
+	fi;
 	@docker buildx use consul-builder && docker buildx build -t '$(REMOTE_DEV_IMAGE)' \
        --platform linux/amd64,linux/arm64 \
 	   --build-arg CONSUL_IMAGE_VERSION=$(CONSUL_IMAGE_VERSION) \
@@ -530,7 +530,7 @@ proto-format: proto-tools
 
 .PHONY: proto-lint
 proto-lint: proto-tools
-	@buf lint 
+	@buf lint
 	@for fn in $$(find proto -name '*.proto'); do \
 		if [[ "$$fn" = "proto/private/pbsubscribe/subscribe.proto" ]]; then \
 			continue ; \
