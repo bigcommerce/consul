@@ -871,6 +871,7 @@ func (b *builder) build() (rt RuntimeConfig, err error) {
 			ACLDownPolicy:    stringVal(c.ACL.DownPolicy),
 			ACLDefaultPolicy: stringVal(c.ACL.DefaultPolicy),
 		},
+		LogACLInfo: boolVal(c.LogACLInfo),
 
 		ACLEnableKeyListPolicy:    boolVal(c.ACL.EnableKeyListPolicy),
 		ACLInitialManagementToken: stringVal(c.ACL.Tokens.InitialManagement),
