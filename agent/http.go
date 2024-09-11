@@ -554,6 +554,16 @@ func (s *HTTPHandlers) wrap(handler endpoint, methods []string) http.HandlerFunc
 			fmt.Fprint(resp, msg)
 		}
 
+		t := ""
+		s.parseToken(req, &t)
+		if s.agent.config.LogACLInfo && t == "" {
+			httpLogger.Info("No ACL token in request",
+				"url", logURL,
+				"user_agent", req.UserAgent(),
+				"remote_addr", req.RemoteAddr,
+			)
+		}
+
 		start := time.Now()
 		defer func() {
 			httpLogger.Debug("Request finished",
