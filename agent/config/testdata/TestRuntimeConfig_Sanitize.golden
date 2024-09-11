@@ -246,6 +246,7 @@
         "Region": "us-west-1",
         "Zone": "us-west-1a"
     },
+    "LogACLInfo": false,
     "Logging": {
         "EnableSyslog": false,
         "LogFilePath": "",

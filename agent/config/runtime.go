@@ -86,6 +86,8 @@ type RuntimeConfig struct {
 
 	ACLResolverSettings consul.ACLResolverSettings
 
+	LogACLInfo bool
+
 	// ACLEnableKeyListPolicy is used to opt-in to the "list" policy added to
 	// KV ACLs in Consul 1.0.
 	//

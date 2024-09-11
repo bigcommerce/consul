@@ -192,6 +192,7 @@ type Config struct {
 	LicensePath                      *string             `mapstructure:"license_path" json:"license_path,omitempty"`
 	Limits                           Limits              `mapstructure:"limits" json:"-"`
 	Locality                         *Locality           `mapstructure:"locality" json:"-"`
+	LogACLInfo                       *bool               `mapstructure:"log_acl_info" json:"log_acl_info,omitempty"`
 	LogLevel                         *string             `mapstructure:"log_level" json:"log_level,omitempty"`
 	LogJSON                          *bool               `mapstructure:"log_json" json:"log_json,omitempty"`
 	LogFile                          *string             `mapstructure:"log_file" json:"log_file,omitempty"`
