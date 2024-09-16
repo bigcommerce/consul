@@ -564,7 +564,7 @@ func (s *HTTPHandlers) wrap(handler endpoint, methods []string) http.HandlerFunc
 		}
 
 		t := ""
-		s.parseToken(req, &t)
+		s.parseTokenInternal(req, &t)
 		if s.agent.config.LogACLInfo && t == "" {
 			httpLogger.Info("No ACL token in request",
 				"url", logURL,
