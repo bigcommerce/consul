@@ -787,7 +787,7 @@ func TestPolicyAuthorizer(t *testing.T) {
 		name := name
 		tcase := tcase
 		t.Run(name, func(t *testing.T) {
-			authz, err := NewPolicyAuthorizer([]*Policy{tcase.policy}, nil)
+			authz, err := NewPolicyAuthorizer([]*Policy{tcase.policy}, nil, nil)
 			require.NoError(t, err)
 
 			for _, check := range tcase.checks {
