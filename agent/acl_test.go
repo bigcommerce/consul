@@ -185,7 +185,7 @@ func TestACL_Version8EnabledByDefault(t *testing.T) {
 }
 
 func authzFromPolicy(policy *acl.Policy, cfg *acl.Config) (acl.Authorizer, error) {
-	return acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, cfg)
+	return acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, cfg, nil)
 }
 
 type testTokenRules struct {

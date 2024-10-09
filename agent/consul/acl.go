@@ -324,7 +324,7 @@ func agentRecoveryAuthorizer(nodeName string, entMeta *acl.EnterpriseMeta, aclCo
 		return nil, err
 	}
 
-	return acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, &conf)
+	return acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, &conf, hclog.New(&hclog.LoggerOptions{}))
 }
 
 func NewACLResolver(config *ACLResolverConfig) (*ACLResolver, error) {
@@ -1094,7 +1094,7 @@ func (r *ACLResolver) ResolveToken(tokenSecretID string) (resolver.Result, error
 	}
 	setEnterpriseConf(identity.EnterpriseMetadata(), &conf)
 
-	authz, err := policies.Compile(r.cache, &conf)
+	authz, err := policies.Compile(r.cache, &conf, r.logger)
 	if err != nil {
 		return resolver.Result{}, err
 	}
