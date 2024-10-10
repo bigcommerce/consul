@@ -3290,7 +3290,7 @@ func TestACL(t *testing.T) {
 	run := func(t *testing.T, tcase aclTest, defaultPolicy Authorizer) {
 		acl := defaultPolicy
 		for _, policy := range tcase.policyStack {
-			newACL, err := NewPolicyAuthorizerWithDefaults(acl, []*Policy{policy}, nil)
+			newACL, err := NewPolicyAuthorizerWithDefaults(acl, []*Policy{policy}, nil, nil)
 			require.NoError(t, err)
 			acl = newACL
 		}
@@ -3493,7 +3493,7 @@ func TestACL_ReadAll(t *testing.T) {
 		policy, err := NewPolicyFromSource(rules, nil, nil)
 		require.NoError(t, err)
 
-		acl, err := NewPolicyAuthorizerWithDefaults(defaultPolicy, []*Policy{policy}, nil)
+		acl, err := NewPolicyAuthorizerWithDefaults(defaultPolicy, []*Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		check(t, acl, "", nil)

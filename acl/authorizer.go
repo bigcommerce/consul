@@ -6,6 +6,8 @@ package acl
 import (
 	"fmt"
 	"strings"
+
+	"github.com/hashicorp/go-hclog"
 )
 
 type EnforcementDecision int
@@ -672,11 +674,11 @@ func Enforce(authz Authorizer, rsc Resource, segment string, access string, ctx 
 
 // NewAuthorizerFromRules is a convenience function to invoke NewPolicyFromSource followed by NewPolicyAuthorizer with
 // the parse policy.
-func NewAuthorizerFromRules(rules string, conf *Config, meta *EnterprisePolicyMeta) (Authorizer, error) {
+func NewAuthorizerFromRules(rules string, conf *Config, meta *EnterprisePolicyMeta, logger hclog.Logger) (Authorizer, error) {
 	policy, err := NewPolicyFromSource(rules, conf, meta)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewPolicyAuthorizer([]*Policy{policy}, conf)
+	return NewPolicyAuthorizer([]*Policy{policy}, conf, logger)
 }

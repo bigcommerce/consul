@@ -15,6 +15,7 @@ import (
 
 	"github.com/hashicorp/consul/api"
 	"github.com/hashicorp/consul/lib/stringslice"
+	"github.com/hashicorp/go-hclog"
 
 	"golang.org/x/crypto/blake2b"
 
@@ -817,7 +818,7 @@ func (policies ACLPolicies) resolveWithCache(cache *ACLCaches, entConf *acl.Conf
 	return parsed, nil
 }
 
-func (policies ACLPolicies) Compile(cache *ACLCaches, entConf *acl.Config) (acl.Authorizer, error) {
+func (policies ACLPolicies) Compile(cache *ACLCaches, entConf *acl.Config, logger hclog.Logger) (acl.Authorizer, error) {
 	// Determine the cache key
 	cacheKey := policies.HashKey()
 	entry := cache.GetAuthorizer(cacheKey)
@@ -832,7 +833,7 @@ func (policies ACLPolicies) Compile(cache *ACLCaches, entConf *acl.Config) (acl.
 	}
 
 	// Create the ACL object
-	authorizer, err := acl.NewPolicyAuthorizer(parsed, entConf)
+	authorizer, err := acl.NewPolicyAuthorizer(parsed, entConf, logger)
 	if err != nil {
 		return nil, fmt.Errorf("failed to construct ACL Authorizer: %v", err)
 	}

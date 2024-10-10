@@ -5,6 +5,7 @@ package acl
 
 import (
 	"github.com/armon/go-radix"
+	"github.com/hashicorp/go-hclog"
 )
 
 type policyAuthorizer struct {
@@ -57,6 +58,8 @@ type policyAuthorizer struct {
 
 	// embedded enterprise policy authorizer
 	enterprisePolicyAuthorizer
+
+	logger hclog.Logger
 }
 
 // policyAuthorizerRule is a struct to hold an ACL policy decision along
@@ -388,13 +391,16 @@ func (p *policyAuthorizer) loadRules(policy *PolicyRules) error {
 	return nil
 }
 
-func newPolicyAuthorizer(policies []*Policy, ent *Config) (*policyAuthorizer, error) {
+func newPolicyAuthorizer(policies []*Policy, ent *Config, logger hclog.Logger) (*policyAuthorizer, error) {
 	policy := MergePolicies(policies)
 
-	return newPolicyAuthorizerFromRules(&policy.PolicyRules, ent)
+	return newPolicyAuthorizerFromRules(&policy.PolicyRules, ent, logger)
 }
 
-func newPolicyAuthorizerFromRules(rules *PolicyRules, ent *Config) (*policyAuthorizer, error) {
+func newPolicyAuthorizerFromRules(rules *PolicyRules, ent *Config, logger hclog.Logger) (*policyAuthorizer, error) {
+	if logger == nil {
+		logger = hclog.New(&hclog.LoggerOptions{})
+	}
 	p := &policyAuthorizer{
 		agentRules:              radix.New(),
 		identityRules:           radix.New(),
@@ -406,6 +412,7 @@ func newPolicyAuthorizerFromRules(rules *PolicyRules, ent *Config) (*policyAutho
 		sessionRules:            radix.New(),
 		eventRules:              radix.New(),
 		preparedQueryRules:      radix.New(),
+		logger:                  logger.Named("PolicyAuthorizer"),
 	}
 
 	p.enterprisePolicyAuthorizer.init(ent)
@@ -523,6 +530,7 @@ func (p *policyAuthorizer) ACLRead(*AuthorizerContext) EnforcementDecision {
 	if p.aclRule != nil {
 		return enforce(p.aclRule.access, AccessRead)
 	}
+	p.logger.Info("Checking default ACLRead")
 	return Default
 }
 
@@ -531,6 +539,7 @@ func (p *policyAuthorizer) ACLWrite(*AuthorizerContext) EnforcementDecision {
 	if p.aclRule != nil {
 		return enforce(p.aclRule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default ACLWrite")
 	return Default
 }
 
@@ -540,6 +549,7 @@ func (p *policyAuthorizer) AgentRead(node string, _ *AuthorizerContext) Enforcem
 	if rule, ok := getPolicy(node, p.agentRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default AgentRead", "node", node)
 	return Default
 }
 
@@ -549,6 +559,7 @@ func (p *policyAuthorizer) AgentWrite(node string, _ *AuthorizerContext) Enforce
 	if rule, ok := getPolicy(node, p.agentRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default AgentWrite", "node", node)
 	return Default
 }
 
@@ -557,6 +568,7 @@ func (p *policyAuthorizer) Snapshot(_ *AuthorizerContext) EnforcementDecision {
 	if p.aclRule != nil {
 		return enforce(p.aclRule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default Snapshot")
 	return Default
 }
 
@@ -566,6 +578,7 @@ func (p *policyAuthorizer) EventRead(name string, _ *AuthorizerContext) Enforcem
 	if rule, ok := getPolicy(name, p.eventRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default EventRead", "event", name)
 	return Default
 }
 
@@ -575,6 +588,7 @@ func (p *policyAuthorizer) EventWrite(name string, _ *AuthorizerContext) Enforce
 	if rule, ok := getPolicy(name, p.eventRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default EventWrite", "event", name)
 	return Default
 }
 
@@ -583,6 +597,7 @@ func (p *policyAuthorizer) IdentityRead(name string, _ *AuthorizerContext) Enfor
 	if rule, ok := getPolicy(name, p.identityRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default IdentityRead", "name", name)
 	return Default
 }
 
@@ -597,11 +612,13 @@ func (p *policyAuthorizer) IdentityWrite(name string, _ *AuthorizerContext) Enfo
 	if rule, ok := getPolicy(name, p.identityRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default IdentityWrite", "name", name)
 	return Default
 }
 
 // IdentityWriteAny checks for write permission on any workload identity.
 func (p *policyAuthorizer) IdentityWriteAny(_ *AuthorizerContext) EnforcementDecision {
+	p.logger.Info("Checking default IdentityWriteAny")
 	return p.anyAllowed(p.identityRules, AccessWrite)
 }
 
@@ -609,6 +626,7 @@ func (p *policyAuthorizer) IdentityWriteAny(_ *AuthorizerContext) EnforcementDec
 // no matching intentions is to allow or deny.
 func (p *policyAuthorizer) IntentionDefaultAllow(_ *AuthorizerContext) EnforcementDecision {
 	// We always go up, this can't be determined by a policy.
+	p.logger.Info("Checking default IntentionDefaultAllow")
 	return Default
 }
 
@@ -621,6 +639,7 @@ func (p *policyAuthorizer) IntentionRead(prefix string, _ *AuthorizerContext) En
 	if rule, ok := getPolicy(prefix, p.intentionRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default IntentionRead", "prefix", prefix)
 	return Default
 }
 
@@ -634,6 +653,7 @@ func (p *policyAuthorizer) IntentionWrite(prefix string, _ *AuthorizerContext) E
 	if rule, ok := getPolicy(prefix, p.intentionRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default IntentionWrite", "prefix", prefix)
 	return Default
 }
 
@@ -646,6 +666,7 @@ func (p *policyAuthorizer) TrafficPermissionsRead(prefix string, _ *AuthorizerCo
 	if rule, ok := getPolicy(prefix, p.trafficPermissionsRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default TrafficPermissionsRead", "prefix", prefix)
 	return Default
 }
 
@@ -659,6 +680,7 @@ func (p *policyAuthorizer) TrafficPermissionsWrite(prefix string, _ *AuthorizerC
 	if rule, ok := getPolicy(prefix, p.trafficPermissionsRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default TrafficPermissionsWrite", "prefix", prefix)
 	return Default
 }
 
@@ -667,6 +689,7 @@ func (p *policyAuthorizer) KeyRead(key string, _ *AuthorizerContext) Enforcement
 	if rule, ok := getPolicy(key, p.keyRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default KeyRead", "key", key)
 	return Default
 }
 
@@ -675,6 +698,7 @@ func (p *policyAuthorizer) KeyList(key string, _ *AuthorizerContext) Enforcement
 	if rule, ok := getPolicy(key, p.keyRules); ok {
 		return enforce(rule.access, AccessList)
 	}
+	p.logger.Info("Checking default KeyList", "key", key)
 	return Default
 }
 
@@ -687,6 +711,7 @@ func (p *policyAuthorizer) KeyWrite(key string, entCtx *AuthorizerContext) Enfor
 		}
 		return decision
 	}
+	p.logger.Info("Checking default KeyWrite", "key", key)
 	return Default
 }
 
@@ -769,6 +794,9 @@ func (p *policyAuthorizer) KeyWritePrefix(prefix string, _ *AuthorizerContext) E
 	// either Default or Allow at this point. Allow if there was a prefix rule
 	// that was applicable and it granted write access. Default if there was
 	// no applicable rule.
+	if baseAccess == Default {
+		p.logger.Info("Checking default KeyWritePrefix")
+	}
 	return baseAccess
 }
 
@@ -778,6 +806,7 @@ func (p *policyAuthorizer) KeyringRead(*AuthorizerContext) EnforcementDecision {
 	if p.keyringRule != nil {
 		return enforce(p.keyringRule.access, AccessRead)
 	}
+	p.logger.Info("Checking default KeyringRead")
 	return Default
 }
 
@@ -786,6 +815,7 @@ func (p *policyAuthorizer) KeyringWrite(*AuthorizerContext) EnforcementDecision 
 	if p.keyringRule != nil {
 		return enforce(p.keyringRule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default KeyringWrite")
 	return Default
 }
 
@@ -832,6 +862,7 @@ func (p *policyAuthorizer) OperatorRead(*AuthorizerContext) EnforcementDecision 
 	if p.operatorRule != nil {
 		return enforce(p.operatorRule.access, AccessRead)
 	}
+	p.logger.Info("Checking default OperatorRead")
 	return Default
 }
 
@@ -841,6 +872,7 @@ func (p *policyAuthorizer) OperatorWrite(*AuthorizerContext) EnforcementDecision
 	if p.operatorRule != nil {
 		return enforce(p.operatorRule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default OperatorWrite")
 	return Default
 }
 
@@ -860,6 +892,7 @@ func (p *policyAuthorizer) NodeRead(name string, ctx *AuthorizerContext) Enforce
 	if rule, ok := getPolicy(name, p.nodeRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default NodeRead", "name", name)
 	return Default
 }
 
@@ -872,6 +905,7 @@ func (p *policyAuthorizer) NodeWrite(name string, _ *AuthorizerContext) Enforcem
 	if rule, ok := getPolicy(name, p.nodeRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default NodeWrite", "name", name)
 	return Default
 }
 
@@ -881,6 +915,7 @@ func (p *policyAuthorizer) PreparedQueryRead(prefix string, _ *AuthorizerContext
 	if rule, ok := getPolicy(prefix, p.preparedQueryRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default PreparedQueryRead", "prefix", prefix)
 	return Default
 }
 
@@ -890,6 +925,7 @@ func (p *policyAuthorizer) PreparedQueryWrite(prefix string, _ *AuthorizerContex
 	if rule, ok := getPolicy(prefix, p.preparedQueryRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default PreparedQueryWrite", "prefix", prefix)
 	return Default
 }
 
@@ -909,11 +945,16 @@ func (p *policyAuthorizer) ServiceRead(name string, ctx *AuthorizerContext) Enfo
 	if rule, ok := getPolicy(name, p.serviceRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default ServiceRead", "name", name)
 	return Default
 }
 
 func (p *policyAuthorizer) ServiceReadAll(_ *AuthorizerContext) EnforcementDecision {
-	return p.allAllowed(p.serviceRules, AccessRead)
+	d := p.allAllowed(p.serviceRules, AccessRead)
+	if d == Default {
+		p.logger.Info("Checking default ServiceReadAll")
+	}
+	return d
 }
 
 // ServiceReadPrefix determines whether service read is allowed within the given prefix.
@@ -969,6 +1010,9 @@ func (p *policyAuthorizer) ServiceReadPrefix(prefix string, _ *AuthorizerContext
 		return false
 	})
 
+	if access == Default {
+		p.logger.Info("Checking default ServiceReadPrefix", "prefix", prefix)
+	}
 	return access
 }
 
@@ -977,6 +1021,7 @@ func (p *policyAuthorizer) ServiceWrite(name string, _ *AuthorizerContext) Enfor
 	if rule, ok := getPolicy(name, p.serviceRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default ServiceReadAll", "name", name)
 	return Default
 }
 
@@ -989,6 +1034,7 @@ func (p *policyAuthorizer) SessionRead(node string, _ *AuthorizerContext) Enforc
 	if rule, ok := getPolicy(node, p.sessionRules); ok {
 		return enforce(rule.access, AccessRead)
 	}
+	p.logger.Info("Checking default SessionRead", "node", node)
 	return Default
 }
 
@@ -998,6 +1044,7 @@ func (p *policyAuthorizer) SessionWrite(node string, _ *AuthorizerContext) Enfor
 	if rule, ok := getPolicy(node, p.sessionRules); ok {
 		return enforce(rule.access, AccessWrite)
 	}
+	p.logger.Info("Checking default SessionWrite", "node", node)
 	return Default
 }
 
