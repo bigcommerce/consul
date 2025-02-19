@@ -30,8 +30,10 @@ import (
 	"github.com/hashicorp/consul/types"
 )
 
-type authzResolver func(string) (structs.ACLIdentity, acl.Authorizer, error)
-type identResolver func(string) (structs.ACLIdentity, error)
+type (
+	authzResolver func(string) (structs.ACLIdentity, acl.Authorizer, error)
+	identResolver func(string) (structs.ACLIdentity, error)
+)
 
 type TestACLAgent struct {
 	resolveAuthzFn authzResolver
@@ -132,39 +134,51 @@ func (a *TestACLAgent) ResolveTokenAndDefaultMeta(secretID string, entMeta *acl.
 func (a *TestACLAgent) GetLANCoordinate() (librtt.CoordinateSet, error) {
 	return nil, fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) Leave() error {
 	return fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) LANMembersInAgentPartition() []serf.Member {
 	return nil
 }
+
 func (a *TestACLAgent) LANMembers(f consul.LANMemberFilter) ([]serf.Member, error) {
 	return nil, fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) AgentLocalMember() serf.Member {
 	return serf.Member{}
 }
+
 func (a *TestACLAgent) JoinLAN(addrs []string, entMeta *acl.EnterpriseMeta) (n int, err error) {
 	return 0, fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) RemoveFailedNode(node string, prune bool, entMeta *acl.EnterpriseMeta) error {
 	return fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) RPC(ctx context.Context, method string, args interface{}, reply interface{}) error {
 	return fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) SnapshotRPC(args *structs.SnapshotRequest, in io.Reader, out io.Writer, replyFn structs.SnapshotReplyFn) error {
 	return fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) Shutdown() error {
 	return fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) Stats() map[string]map[string]string {
 	return nil
 }
+
 func (a *TestACLAgent) ReloadConfig(_ consul.ReloadableConfig) error {
 	return fmt.Errorf("Unimplemented")
 }
+
 func (a *TestACLAgent) ResourceServiceClient() pbresource.ResourceServiceClient {
 	return nil
 }
@@ -185,7 +199,7 @@ func TestACL_Version8EnabledByDefault(t *testing.T) {
 }
 
 func authzFromPolicy(policy *acl.Policy, cfg *acl.Config) (acl.Authorizer, error) {
-	return acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, cfg)
+	return acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, cfg, nil)
 }
 
 type testTokenRules struct {

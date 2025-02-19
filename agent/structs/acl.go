@@ -15,6 +15,8 @@ import (
 
 	"golang.org/x/crypto/blake2b"
 
+	"github.com/hashicorp/go-hclog"
+
 	"github.com/hashicorp/consul/acl"
 	"github.com/hashicorp/consul/api"
 	"github.com/hashicorp/consul/lib"
@@ -380,7 +382,6 @@ func (t *ACLToken) UnmarshalJSON(data []byte) (err error) {
 		case float64:
 			t.ExpirationTTL = time.Duration(v)
 		}
-
 	}
 	if aux.Hash != "" {
 		t.Hash = []byte(aux.Hash)
@@ -709,8 +710,10 @@ func (p *ACLPolicy) Stub() *ACLPolicyListStub {
 	}
 }
 
-type ACLPolicies []*ACLPolicy
-type ACLPolicyListStubs []*ACLPolicyListStub
+type (
+	ACLPolicies        []*ACLPolicy
+	ACLPolicyListStubs []*ACLPolicyListStub
+)
 
 func (p *ACLPolicy) SetHash(force bool) []byte {
 	if force || p.Hash == nil {
@@ -812,7 +815,7 @@ func (policies ACLPolicies) resolveWithCache(cache *ACLCaches, entConf *acl.Conf
 	return parsed, nil
 }
 
-func (policies ACLPolicies) Compile(cache *ACLCaches, entConf *acl.Config) (acl.Authorizer, error) {
+func (policies ACLPolicies) Compile(cache *ACLCaches, entConf *acl.Config, logger hclog.Logger) (acl.Authorizer, error) {
 	// Determine the cache key
 	cacheKey := policies.HashKey()
 	entry := cache.GetAuthorizer(cacheKey)
@@ -827,7 +830,7 @@ func (policies ACLPolicies) Compile(cache *ACLCaches, entConf *acl.Config) (acl.
 	}
 
 	// Create the ACL object
-	authorizer, err := acl.NewPolicyAuthorizer(parsed, entConf)
+	authorizer, err := acl.NewPolicyAuthorizer(parsed, entConf, logger)
 	if err != nil {
 		return nil, fmt.Errorf("failed to construct ACL Authorizer: %v", err)
 	}
@@ -1196,8 +1199,10 @@ func (m *ACLAuthMethodListStub) MarshalJSON() ([]byte, error) {
 	return data, err
 }
 
-type ACLAuthMethods []*ACLAuthMethod
-type ACLAuthMethodListStubs []*ACLAuthMethodListStub
+type (
+	ACLAuthMethods         []*ACLAuthMethod
+	ACLAuthMethodListStubs []*ACLAuthMethodListStub
+)
 
 func (methods ACLAuthMethods) Sort() {
 	sort.Slice(methods, func(i, j int) bool {
