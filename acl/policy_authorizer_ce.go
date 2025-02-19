@@ -5,6 +5,8 @@
 
 package acl
 
+import "github.com/hashicorp/go-hclog"
+
 // enterprisePolicyAuthorizer stub
 type enterprisePolicyAuthorizer struct{}
 
@@ -17,14 +19,14 @@ func (authz *enterprisePolicyAuthorizer) enforce(_ *EnterpriseRule, _ *Authorize
 }
 
 // NewPolicyAuthorizer merges the policies and returns an Authorizer that will enforce them
-func NewPolicyAuthorizer(policies []*Policy, entConfig *Config) (Authorizer, error) {
-	return newPolicyAuthorizer(policies, entConfig)
+func NewPolicyAuthorizer(policies []*Policy, entConfig *Config, logger hclog.Logger) (Authorizer, error) {
+	return newPolicyAuthorizer(policies, entConfig, logger)
 }
 
 // NewPolicyAuthorizerWithDefaults will actually created a ChainedAuthorizer with
 // the policies compiled into one Authorizer and the backup policy of the defaultAuthz
-func NewPolicyAuthorizerWithDefaults(defaultAuthz Authorizer, policies []*Policy, entConfig *Config) (Authorizer, error) {
-	authz, err := newPolicyAuthorizer(policies, entConfig)
+func NewPolicyAuthorizerWithDefaults(defaultAuthz Authorizer, policies []*Policy, entConfig *Config, logger hclog.Logger) (Authorizer, error) {
+	authz, err := newPolicyAuthorizer(policies, entConfig, logger)
 	if err != nil {
 		return nil, err
 	}
