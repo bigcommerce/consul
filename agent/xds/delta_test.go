@@ -1244,7 +1244,7 @@ func TestServer_DeltaAggregatedResources_v3_ACLEnforcement(t *testing.T) {
 				// Parse the ACL and enforce it
 				policy, err := acl.NewPolicyFromSource(tc.acl, nil, nil)
 				require.NoError(t, err)
-				return acl.NewPolicyAuthorizerWithDefaults(acl.RootAuthorizer("deny"), []*acl.Policy{policy}, nil)
+				return acl.NewPolicyAuthorizerWithDefaults(acl.RootAuthorizer("deny"), []*acl.Policy{policy}, nil, nil)
 			}
 
 			scenario := newTestServerDeltaScenario(t, aclResolve, "web-sidecar-proxy", tt.token, 0)
@@ -1346,7 +1346,7 @@ func TestServer_DeltaAggregatedResources_v3_ACLTokenDeleted_StreamTerminatedDuri
 			return nil, acl.ErrNotFound
 		}
 
-		return acl.NewPolicyAuthorizerWithDefaults(acl.RootAuthorizer("deny"), []*acl.Policy{policy}, nil)
+		return acl.NewPolicyAuthorizerWithDefaults(acl.RootAuthorizer("deny"), []*acl.Policy{policy}, nil, nil)
 	}
 	scenario := newTestServerDeltaScenario(t, aclResolve, "web-sidecar-proxy", token,
 		100*time.Millisecond, // Make this short.
@@ -1444,7 +1444,7 @@ func TestServer_DeltaAggregatedResources_v3_ACLTokenDeleted_StreamTerminatedInBa
 			return nil, acl.ErrNotFound
 		}
 
-		return acl.NewPolicyAuthorizerWithDefaults(acl.RootAuthorizer("deny"), []*acl.Policy{policy}, nil)
+		return acl.NewPolicyAuthorizerWithDefaults(acl.RootAuthorizer("deny"), []*acl.Policy{policy}, nil, nil)
 	}
 	scenario := newTestServerDeltaScenario(t, aclResolve, "web-sidecar-proxy", token,
 		100*time.Millisecond, // Make this short.
@@ -1807,7 +1807,6 @@ func Test_validateAndApplyEnvoyExtension_Validations(t *testing.T) {
 			args = map[string]interface{}{
 				"ARN": "arn:aws:lambda:us-east-1:111111111111:function:lambda-1234",
 			}
-
 		}
 		return extensioncommon.RuntimeConfig{
 			EnvoyExtension: api.EnvoyExtension{
