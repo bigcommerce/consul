@@ -89,7 +89,7 @@ require (
 	google.golang.org/genproto v0.0.0-20220921223823-23cae91e6737
 	google.golang.org/grpc v1.49.0
 	google.golang.org/protobuf v1.28.1
-	gopkg.in/square/go-jose.v2 v2.5.1
+	gopkg.in/square/go-jose.v2 v2.6.0
 	gotest.tools/v3 v3.0.3
 	k8s.io/api v0.18.2
 	k8s.io/apimachinery v0.18.2
