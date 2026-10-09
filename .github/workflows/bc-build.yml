@@ -31,6 +31,23 @@ jobs:
         with:
           go-version: ${{ needs.get-go-version.outputs.go-version }}
 
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          cache-dependency-path: 'ui/yarn.lock'
+
+      # Same as upstream build.yml: replace the committed UI assets with a fresh build
+      - name: Build UI
+        run: |
+          CONSUL_VERSION=$(cat version/VERSION)
+          CONSUL_DATE=$(build-support/scripts/build-date.sh)
+          CONSUL_COPYRIGHT_YEAR=$(git show -s --format=%cd --date=format:%Y HEAD)
+          export CONSUL_VERSION CONSUL_DATE CONSUL_COPYRIGHT_YEAR
+          cd ui && make && cd ..
+          rm -rf agent/uiserver/dist
+          mv ui/packages/consul-ui/dist agent/uiserver/
+
       - name: Build
         env:
           CGO_ENABLED: "0"
