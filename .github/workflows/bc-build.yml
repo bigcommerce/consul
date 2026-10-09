@@ -1,0 +1,80 @@
+# BigCommerce build of the patched Consul binary.
+#
+# Pushes to a `v*-bc` branch build linux/amd64 and upload it as a workflow
+# artifact. Pushing a `v*-bc*` tag also publishes the zip and SHA256SUMS as a
+# GitHub release, which fpm-cookery packages into the consul deb.
+
+name: bc-build
+
+on:
+  push:
+    branches:
+      - 'v*-bc'
+    tags:
+      - 'v*-bc*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  get-go-version:
+    uses: ./.github/workflows/reusable-get-go-version.yml
+
+  build:
+    needs: get-go-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+
+      - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
+        with:
+          go-version: ${{ needs.get-go-version.outputs.go-version }}
+
+      - name: Build
+        env:
+          CGO_ENABLED: "0"
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          T="github.com/hashicorp/consul/version"
+          go build -trimpath -buildvcs=false \
+            -ldflags "-X ${T}.GitCommit=${GITHUB_SHA::8} -X ${T}.BuildDate=$(build-support/scripts/build-date.sh)" \
+            -o dist/consul .
+          ./dist/consul version
+
+      - name: Archive
+        run: |
+          ZIP="consul_${GITHUB_REF_NAME}_linux_amd64.zip"
+          (cd dist && zip "../${ZIP}" consul)
+          sha256sum "${ZIP}" > SHA256SUMS
+          cat SHA256SUMS
+          echo "ZIP=${ZIP}" >> "$GITHUB_ENV"
+
+      - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: ${{ env.ZIP }}
+          path: |
+            ${{ env.ZIP }}
+            SHA256SUMS
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
+        with:
+          name: consul_${{ github.ref_name }}_linux_amd64.zip
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "BigCommerce build of ${GITHUB_REF_NAME} (${GITHUB_SHA::8})." \
+            "consul_${GITHUB_REF_NAME}_linux_amd64.zip" SHA256SUMS
