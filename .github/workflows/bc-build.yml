@@ -31,7 +31,7 @@ jobs:
         with:
           go-version: ${{ needs.get-go-version.outputs.go-version }}
 
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '18'
           cache: 'yarn'
