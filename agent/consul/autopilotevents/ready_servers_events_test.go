@@ -107,7 +107,7 @@ func TestEventPayloadReadyServers_HasReadPermission(t *testing.T) {
  		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		hasRead := EventPayloadReadyServers{}.HasReadPermission(authz)

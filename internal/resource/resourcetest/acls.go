@@ -91,7 +91,7 @@ func RunACLTestCase(t *testing.T, tc ACLTestCase, registry resource.Registry) {
 	config := acl.Config{
 		WildcardName: structs.WildcardSpecifier,
 	}
-	authz, err := acl.NewAuthorizerFromRules(tc.Rules, &config, nil)
+	authz, err := acl.NewAuthorizerFromRules(tc.Rules, &config, nil, nil)
 	require.NoError(t, err)
 	authz = acl.NewChainedAuthorizer([]acl.Authorizer{authz, acl.DenyAll()})
 

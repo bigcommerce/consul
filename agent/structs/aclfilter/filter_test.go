@@ -34,7 +34,7 @@ func TestACL_filterImported_IndexedHealthChecks(t *testing.T) {
 		policy, err := acl.NewPolicyFromSource(tc.policyRules, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		New(authz, logger).Filter(tc.list)
@@ -105,7 +105,7 @@ func TestACL_filterImported_IndexedNodes(t *testing.T) {
 		policy, err := acl.NewPolicyFromSource(tc.policyRules, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		New(authz, logger).Filter(tc.list)
@@ -178,7 +178,7 @@ func TestACL_filterImported_IndexedNodeServices(t *testing.T) {
 		policy, err := acl.NewPolicyFromSource(tc.policyRules, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		New(authz, logger).Filter(tc.list)
@@ -259,7 +259,7 @@ func TestACL_filterImported_IndexedNodeServiceList(t *testing.T) {
 		policy, err := acl.NewPolicyFromSource(tc.policyRules, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		New(authz, logger).Filter(tc.list)
@@ -339,7 +339,7 @@ func TestACL_filterImported_IndexedServiceNodes(t *testing.T) {
 		policy, err := acl.NewPolicyFromSource(tc.policyRules, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		New(authz, logger).Filter(tc.list)
@@ -408,7 +408,7 @@ func TestACL_filterImported_CheckServiceNode(t *testing.T) {
 		policy, err := acl.NewPolicyFromSource(tc.policyRules, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		New(authz, logger).Filter(tc.list)
@@ -520,7 +520,7 @@ func TestACL_filterHealthChecks(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -542,7 +542,7 @@ func TestACL_filterHealthChecks(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -564,7 +564,7 @@ func TestACL_filterHealthChecks(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -625,7 +625,7 @@ func TestACL_filterIntentions(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -696,7 +696,7 @@ func TestACL_filterServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -715,7 +715,7 @@ func TestACL_filterServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -779,7 +779,7 @@ func TestACL_filterNodeServices(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -798,7 +798,7 @@ func TestACL_filterNodeServices(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -817,7 +817,7 @@ func TestACL_filterNodeServices(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -876,7 +876,7 @@ func TestACL_filterNodeServiceList(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -895,7 +895,7 @@ func TestACL_filterNodeServiceList(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -914,7 +914,7 @@ func TestACL_filterNodeServiceList(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -957,7 +957,7 @@ func TestACL_filterGatewayServices(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1017,7 +1017,7 @@ func TestACL_filterCheckServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1036,7 +1036,7 @@ func TestACL_filterCheckServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1055,7 +1055,7 @@ func TestACL_filterCheckServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1115,7 +1115,7 @@ func TestACL_filterPreparedQueryExecuteResponse(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1134,7 +1134,7 @@ func TestACL_filterPreparedQueryExecuteResponse(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1153,7 +1153,7 @@ func TestACL_filterPreparedQueryExecuteResponse(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1253,7 +1253,7 @@ service "foo" {
 		if err != nil {
 			t.Fatalf("err %v", err)
 		}
-		perms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		perms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		if err != nil {
 			t.Fatalf("err: %v", err)
 		}
@@ -1281,7 +1281,7 @@ service "bar" {
 		if err != nil {
 			t.Fatalf("err %v", err)
 		}
-		perms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		perms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		if err != nil {
 			t.Fatalf("err: %v", err)
 		}
@@ -1315,7 +1315,7 @@ service "bar" {
 		if err != nil {
 			t.Fatalf("err %v", err)
 		}
-		perms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		perms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		if err != nil {
 			t.Fatalf("err: %v", err)
 		}
@@ -1365,7 +1365,7 @@ func TestACL_filterCoordinates(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1417,7 +1417,7 @@ func TestACL_filterSessions(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -1521,7 +1521,7 @@ func TestACL_filterNodeDump(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 
 				return authz
@@ -1541,7 +1541,7 @@ func TestACL_filterNodeDump(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 
 				return authz
@@ -1570,7 +1570,7 @@ func TestACL_filterNodeDump(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 
 				return authz
@@ -1608,7 +1608,7 @@ func TestACL_filterNodeDump(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 
 				return authz
@@ -1632,7 +1632,7 @@ func TestACL_filterNodeDump(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 
 				return authz
@@ -1674,7 +1674,7 @@ func TestACL_filterNodeDump(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 
 				return authz
@@ -1843,7 +1843,7 @@ func TestACL_filterIndexedNodesWithGateways(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 				return authz
 			},
@@ -1907,7 +1907,7 @@ func TestACL_filterIndexedNodesWithGateways(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 				return authz
 			},
@@ -1933,7 +1933,7 @@ func TestACL_filterIndexedNodesWithGateways(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 				return authz
 			},
@@ -1958,7 +1958,7 @@ func TestACL_filterIndexedNodesWithGateways(t *testing.T) {
 		`, nil, nil)
 				require.NoError(t, err)
 
-				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+				authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 				require.NoError(t, err)
 				return authz
 			},
@@ -2052,7 +2052,7 @@ func TestACL_filterIndexedServiceDump(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2074,7 +2074,7 @@ func TestACL_filterIndexedServiceDump(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2097,7 +2097,7 @@ func TestACL_filterIndexedServiceDump(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2119,7 +2119,7 @@ func TestACL_filterIndexedServiceDump(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2194,7 +2194,7 @@ func TestACL_filterDatacenterCheckServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2214,7 +2214,7 @@ func TestACL_filterDatacenterCheckServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2233,7 +2233,7 @@ func TestACL_filterDatacenterCheckServiceNodes(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2390,7 +2390,7 @@ func TestACL_filterPreparedQueries(t *testing.T) {
 		`, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		list := makeList()
@@ -2462,7 +2462,7 @@ func policy(t *testing.T, hcl string) acl.Authorizer {
 	policy, err := acl.NewPolicyFromSource(hcl, nil, nil)
 	require.NoError(t, err)
 
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 	require.NoError(t, err)
 
 	return authz

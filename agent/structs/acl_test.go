@@ -529,7 +529,7 @@ func TestStructs_ACLPolicies_Compile(t *testing.T) {
 	}
 
 	t.Run("Cache Miss", func(t *testing.T) {
-		authz, err := testPolicies.Compile(cache, nil)
+		authz, err := testPolicies.Compile(cache, nil, nil)
 		require.NoError(t, err)
 		require.NotNil(t, authz)
 
@@ -557,7 +557,7 @@ func TestStructs_ACLPolicies_Compile(t *testing.T) {
 	})
 
 	t.Run("Cache Hit", func(t *testing.T) {
-		authz, err := testPolicies.Compile(cache, nil)
+		authz, err := testPolicies.Compile(cache, nil, nil)
 		require.NoError(t, err)
 		require.NotNil(t, authz)
 

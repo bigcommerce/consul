@@ -138,7 +138,7 @@ func policyAuthorizer(t *testing.T, policyHCL string) acl.Authorizer {
 	policy, err := acl.NewPolicyFromSource(policyHCL, nil, nil)
 	require.NoError(t, err)
 
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 	require.NoError(t, err)
 
 	return authz

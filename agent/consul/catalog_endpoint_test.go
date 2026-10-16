@@ -3965,7 +3965,7 @@ func TestVetRegisterWithACL(t *testing.T) {
 		policy, err := acl.NewPolicyFromSource(rules, nil, nil)
 		require.NoError(t, err)
 
-		authz, err := acl.NewPolicyAuthorizerWithDefaults(defaultAuthz, []*acl.Policy{policy}, nil)
+		authz, err := acl.NewPolicyAuthorizerWithDefaults(defaultAuthz, []*acl.Policy{policy}, nil, nil)
 		require.NoError(t, err)
 
 		return authz
@@ -4257,7 +4257,7 @@ func TestVetDeregisterWithACL(t *testing.T) {
 	if err != nil {
 		t.Fatalf("err %v", err)
 	}
-	nodePerms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+	nodePerms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
@@ -4270,7 +4270,7 @@ func TestVetDeregisterWithACL(t *testing.T) {
 	if err != nil {
 		t.Fatalf("err %v", err)
 	}
-	servicePerms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+	servicePerms, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}

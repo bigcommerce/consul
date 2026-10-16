@@ -726,7 +726,7 @@ node "node1" {
 }
 `
 		cfg := &acl.Config{WildcardName: structs.WildcardSpecifier}
-		authorizer, err := acl.NewAuthorizerFromRules(rules, cfg, nil)
+		authorizer, err := acl.NewAuthorizerFromRules(rules, cfg, nil, nil)
 		require.NoError(t, err)
 		authorizer = acl.NewChainedAuthorizer([]acl.Authorizer{authorizer, acl.DenyAll()})
 		require.Equal(t, acl.Deny, authorizer.NodeRead("denied", nil))
@@ -930,7 +930,7 @@ node "node1" {
 	policy = "write"
 }
 `
-		authorizer, err := acl.NewAuthorizerFromRules(rules, &acl.Config{WildcardName: structs.WildcardSpecifier}, nil)
+		authorizer, err := acl.NewAuthorizerFromRules(rules, &acl.Config{WildcardName: structs.WildcardSpecifier}, nil, nil)
 		require.NoError(t, err)
 		authorizer = acl.NewChainedAuthorizer([]acl.Authorizer{authorizer, acl.DenyAll()})
 		require.Equal(t, acl.Deny, authorizer.NodeRead("denied", nil))

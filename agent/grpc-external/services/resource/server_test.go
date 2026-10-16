@@ -46,7 +46,7 @@ func AuthorizerFrom(t *testing.T, policyStrs ...string) resolver.Result {
 		policies = append(policies, policy)
 	}
 
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), policies, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), policies, nil, nil)
 	require.NoError(t, err)
 
 	return resolver.Result{

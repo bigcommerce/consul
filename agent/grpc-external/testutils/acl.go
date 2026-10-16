@@ -52,7 +52,7 @@ func ACLServiceWriteAny(t testutil.TestingTB) resolver.Result {
 	`, nil, nil)
 	require.NoError(t, err)
 
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 	require.NoError(t, err)
 
 	return resolver.Result{
@@ -74,7 +74,7 @@ func ACLServiceRead(t testutil.TestingTB, serviceName string) resolver.Result {
 			},
 		},
 	}
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclRule}, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclRule}, nil, nil)
 	require.NoError(t, err)
 
 	return resolver.Result{
@@ -86,7 +86,7 @@ func ACLServiceRead(t testutil.TestingTB, serviceName string) resolver.Result {
 func ACLUseProvidedPolicy(t testutil.TestingTB, aclPolicy *acl.Policy) resolver.Result {
 	t.Helper()
 
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclPolicy}, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclPolicy}, nil, nil)
 	require.NoError(t, err)
 
 	return resolver.Result{
@@ -103,7 +103,7 @@ func ACLOperatorRead(t testutil.TestingTB) resolver.Result {
 			Operator: acl.PolicyRead,
 		},
 	}
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclRule}, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclRule}, nil, nil)
 	require.NoError(t, err)
 
 	return resolver.Result{
@@ -120,7 +120,7 @@ func ACLOperatorWrite(t testutil.TestingTB) resolver.Result {
 			Operator: acl.PolicyWrite,
 		},
 	}
-	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclRule}, nil)
+	authz, err := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{aclRule}, nil, nil)
 	require.NoError(t, err)
 
 	return resolver.Result{

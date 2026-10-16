@@ -14,7 +14,7 @@ import (
 func TestFilter_DirEnt(t *testing.T) {
 	t.Parallel()
 	policy, _ := acl.NewPolicyFromSource(testFilterRules, nil, nil)
-	aclR, _ := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+	aclR, _ := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 
 	type tcase struct {
 		in  []string
@@ -56,7 +56,7 @@ func TestFilter_DirEnt(t *testing.T) {
 func TestFilter_TxnResults(t *testing.T) {
 	t.Parallel()
 	policy, _ := acl.NewPolicyFromSource(testFilterRules, nil, nil)
-	aclR, _ := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil)
+	aclR, _ := acl.NewPolicyAuthorizerWithDefaults(acl.DenyAll(), []*acl.Policy{policy}, nil, nil)
 
 	type tcase struct {
 		in  []string
