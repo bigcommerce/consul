@@ -1,0 +1,73 @@
+# BigCommerce unit tests for the patched Consul.
+#
+# Upstream's go-tests and lint workflows need HashiCorp's runners and secrets,
+# so on this fork they queue for 24h and then fail. This runs on standard
+# runners: type-check every package and its tests, then run the unit tests for
+# the packages the BC patches and backports change.
+
+name: bc-test
+
+on:
+  pull_request:
+    branches:
+      - 'main-bc'
+  push:
+    branches:
+      - 'main-bc'
+    tags:
+      - 'v*-bc*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  get-go-version:
+    uses: ./.github/workflows/reusable-get-go-version.yml
+
+  vet:
+    needs: get-go-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+
+      - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
+        with:
+          go-version: ${{ needs.get-go-version.outputs.go-version }}
+
+      # Catches a signature change that breaks callers in packages the unit job
+      # doesn't run. copylocks and lostcancel are off because upstream v1.20.6
+      # already trips them (agent/config/config.deepcopy.go and
+      # agent/grpc-external/services/peerstream/stream_resources.go).
+      - name: Vet
+        run: go vet -copylocks=false -lostcancel=false ./...
+
+  unit:
+    needs: get-go-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+
+      - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
+        with:
+          go-version: ${{ needs.get-go-version.outputs.go-version }}
+
+      # Reruns failed tests, as upstream's reusable-unit.yml does: some upstream
+      # tests are timing-sensitive on small runners, e.g.
+      # TestServer_DeltaAggregatedResources_v3_ACLEnforcement/default_deny,_no_token
+      # fails about 1 run in 10 with 2 CPUs.
+      - name: Test
+        run: |
+          go run gotest.tools/gotestsum@v1.11.0 \
+            --format=github-actions \
+            --rerun-fails \
+            --packages="./acl/... ./agent/config/... ./agent/proxycfg/... ./agent/structs/... ./agent/submatview/... ./agent/xds/... ./command/connect/envoy/... ./version/..." \
+            -- -timeout 30m
+
+      - name: Test envoyextensions
+        working-directory: envoyextensions
+        run: go test ./...
