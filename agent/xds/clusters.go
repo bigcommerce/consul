@@ -760,6 +760,8 @@ func (s *ResourceGenerator) makeGatewayServiceClusters(
 
 		svcConfig, ok := cfgSnap.TerminatingGateway.ServiceConfigs[svc]
 		isHTTP2 := false
+		var protocol string
+		var idleTimeoutMs *int
 		if ok {
 			upstreamCfg, err := structs.ParseUpstreamConfig(svcConfig.ProxyConfig)
 			if err != nil {
@@ -768,12 +770,24 @@ func (s *ResourceGenerator) makeGatewayServiceClusters(
 				s.Logger.Warn("failed to parse", "upstream", svc, "error", err)
 			}
 			isHTTP2 = upstreamCfg.Protocol == "http2" || upstreamCfg.Protocol == "grpc"
+			protocol = upstreamCfg.Protocol
+
+			// A terminating gateway gets proxy-defaults through each linked
+			// service's resolved config, not its own.
+			proxyCfg, err := config.ParseProxyConfig(svcConfig.ProxyConfig)
+			if err != nil {
+				s.Logger.Warn("failed to parse Proxy.Config", "service", svc, "error", err)
+			}
+			idleTimeoutMs = proxyCfg.UpstreamConnectionIdleTimeoutMs
 		}
 
 		if isHTTP2 {
 			if err := s.setHttp2ProtocolOptions(cluster); err != nil {
 				return nil, err
 			}
+		}
+		if err := s.setUpstreamConnectionIdleTimeout(cluster, protocol, idleTimeoutMs); err != nil {
+			return nil, err
 		}
 
 		// If there is a service-resolver for this service then also setup a cluster for each subset
@@ -800,6 +814,9 @@ func (s *ResourceGenerator) makeGatewayServiceClusters(
 				if err := s.setHttp2ProtocolOptions(cluster); err != nil {
 					return nil, err
 				}
+			}
+			if err := s.setUpstreamConnectionIdleTimeout(cluster, protocol, idleTimeoutMs); err != nil {
+				return nil, err
 			}
 			clusters = append(clusters, cluster)
 		}
@@ -1206,6 +1223,9 @@ func (s *ResourceGenerator) makeUpstreamClusterForPeerService(
 				return c, err
 			}
 		}
+		if err := s.setUpstreamConnectionIdleTimeout(c, upstreamConfig.Protocol, cfgSnap.GetProxyConfig(s.Logger).UpstreamConnectionIdleTimeoutMs); err != nil {
+			return c, err
+		}
 
 		useEDS := true
 		if _, ok := cfgSnap.ConnectProxy.PeerUpstreamEndpointsUseHostnames[uid]; ok {
@@ -1322,6 +1342,9 @@ func (s *ResourceGenerator) makeUpstreamClusterForPreparedQuery(upstream structs
 			if err := s.setHttp2ProtocolOptions(c); err != nil {
 				return c, err
 			}
+		}
+		if err := s.setUpstreamConnectionIdleTimeout(c, cfg.Protocol, cfgSnap.GetProxyConfig(s.Logger).UpstreamConnectionIdleTimeoutMs); err != nil {
+			return c, err
 		}
 	}
 
@@ -1564,6 +1587,12 @@ func (s *ResourceGenerator) makeUpstreamClustersForDiscoveryChain(
 
 			if upstreamConfig.Protocol == "http2" || upstreamConfig.Protocol == "grpc" {
 				if err := s.setHttp2ProtocolOptions(c); err != nil {
+					return nil, err
+				}
+			}
+			// Mesh gateways pass connections through without pooling them.
+			if !forMeshGateway {
+				if err := s.setUpstreamConnectionIdleTimeout(c, upstreamConfig.Protocol, cfgSnap.GetProxyConfig(s.Logger).UpstreamConnectionIdleTimeoutMs); err != nil {
 					return nil, err
 				}
 			}
@@ -2083,6 +2112,47 @@ func (s *ResourceGenerator) setHttp2ProtocolOptions(c *envoy_cluster_v3.Cluster)
 	c.TypedExtensionProtocolOptions = map[string]*anypb.Any{
 		"envoy.extensions.upstreams.http.v3.HttpProtocolOptions": any,
 	}
+
+	return nil
+}
+
+// setUpstreamConnectionIdleTimeout applies upstream_connection_idle_timeout_ms
+// to an http, http2 or grpc upstream cluster. It runs after
+// setHttp2ProtocolOptions and keeps the HTTP/2 config that put there. http
+// clusters have no protocol options yet, so they get HTTP/1.1, which is what
+// Envoy uses without them.
+func (s *ResourceGenerator) setUpstreamConnectionIdleTimeout(c *envoy_cluster_v3.Cluster, protocol string, timeoutMs *int) error {
+	if timeoutMs == nil || !structs.IsProtocolHTTPLike(protocol) {
+		return nil
+	}
+
+	const name = "envoy.extensions.upstreams.http.v3.HttpProtocolOptions"
+	cfg := &envoy_upstreams_v3.HttpProtocolOptions{}
+	if existing, ok := c.TypedExtensionProtocolOptions[name]; ok {
+		if err := existing.UnmarshalTo(cfg); err != nil {
+			return err
+		}
+	} else {
+		cfg.UpstreamProtocolOptions = &envoy_upstreams_v3.HttpProtocolOptions_ExplicitHttpConfig_{
+			ExplicitHttpConfig: &envoy_upstreams_v3.HttpProtocolOptions_ExplicitHttpConfig{
+				ProtocolConfig: &envoy_upstreams_v3.HttpProtocolOptions_ExplicitHttpConfig_HttpProtocolOptions{
+					HttpProtocolOptions: &envoy_core_v3.Http1ProtocolOptions{},
+				},
+			},
+		}
+	}
+	cfg.CommonHttpProtocolOptions = &envoy_core_v3.HttpProtocolOptions{
+		IdleTimeout: durationpb.New(time.Duration(*timeoutMs) * time.Millisecond),
+	}
+
+	any, err := anypb.New(cfg)
+	if err != nil {
+		return err
+	}
+	if c.TypedExtensionProtocolOptions == nil {
+		c.TypedExtensionProtocolOptions = make(map[string]*anypb.Any)
+	}
+	c.TypedExtensionProtocolOptions[name] = any
 
 	return nil
 }

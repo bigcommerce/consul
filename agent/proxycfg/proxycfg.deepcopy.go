@@ -167,6 +167,10 @@ func (o *ConfigSnapshot) DeepCopy() *ConfigSnapshot {
 			cp.computedFields.proxyConfig.LocalIdleTimeoutMs = new(int)
 			*cp.computedFields.proxyConfig.LocalIdleTimeoutMs = *o.computedFields.proxyConfig.LocalIdleTimeoutMs
 		}
+		if o.computedFields.proxyConfig.UpstreamConnectionIdleTimeoutMs != nil {
+			cp.computedFields.proxyConfig.UpstreamConnectionIdleTimeoutMs = new(int)
+			*cp.computedFields.proxyConfig.UpstreamConnectionIdleTimeoutMs = *o.computedFields.proxyConfig.UpstreamConnectionIdleTimeoutMs
+		}
 	}
 	if o.computedFields.gatewayConfig != nil {
 		cp.computedFields.gatewayConfig = new(config.GatewayConfig)
