@@ -45,7 +45,7 @@ Chris Boulton, 2021-04. When an upstream has no `Limits`, its discovery-chain cl
 Chris Boulton, 2021-06. `consul version` reports `vX.Y.Z-bcN`, where N matches the `vX.Y.Z-bc.N` release tag.
 
 - Code: `version/version.go`.
-- Release: reset to `bc1` when rebasing onto a new upstream version, and bump N for each further release of the same upstream version.
+- Release: reset to `bc1` when rebasing onto a new upstream version, and bump N for each further release of the same upstream version. `bc-build` refuses to release a tag whose N doesn't match.
 
 ### 4. `log_acl_info` logs requests without an ACL token
 
@@ -67,7 +67,8 @@ Joe Cai, 2026-10. `bc-build` builds the binary and publishes releases on `v*-bc*
 
 - Code: `.github/workflows/bc-build.yml`, `bc-test.yml`.
 - Upstream workflows need HashiCorp runners and secrets, so they are disabled in the repository's Actions settings; see [Upstream workflows](#upstream-workflows).
-- When a patch touches a new package, add it to the `--packages` list in `bc-test.yml`. `./agent/` is not in the list (slow and flaky upstream), so patch 9 and patch 4's `agent/http.go` change have no CI test run.
+- When a patch touches a new package, add it to the `--packages` list in `bc-test.yml`. The whole `./agent/` package is too slow for one runner, so its step runs only the tests matching a `-run` pattern (patch 9's check registration and patch 4's HTTP handler wrapper); extend the pattern when a patch changes other code there.
+- On a `v*-bc*` tag, `bc-build` fails unless the binary reports the tag's version (`vX.Y.Z-bc.N` → `Consul vX.Y.Z-bcN`).
 
 ### 7. Golden fixup for new upstream test cases
 
@@ -131,6 +132,8 @@ Backport of [hashicorp/consul#24008](https://github.com/hashicorp/consul/pull/24
    go vet -lostcancel=false ./...
    go test -count=1 ./acl/... ./agent/config/... ./agent/proxycfg/... ./agent/structs/... \
      ./agent/submatview/... ./agent/xds/... ./command/connect/envoy/... ./version/...
+   go test -count=1 ./agent/ \
+     -run 'TestAgent_(AddCheck|AddService|RemoveCheck|RemoveService|UpdateCheck)|TestHTTPAPI|TestHTTP_wrap'
    (cd envoyextensions && go test ./...)
    ```
 

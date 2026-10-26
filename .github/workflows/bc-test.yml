@@ -33,14 +33,14 @@ jobs:
     needs: get-go-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
           go-version: ${{ needs.get-go-version.outputs.go-version }}
 
       # Catches a signature change that breaks callers in packages the unit job
-      # doesn't run. lostcancel is off because upstream v1.22.7 already trips it
+      # doesn't run. lostcancel is off because upstream (still in v2.1.0) trips it
       # (agent/grpc-external/services/peerstream/stream_resources.go).
       - name: Vet
         run: go vet -lostcancel=false ./...
@@ -49,9 +49,9 @@ jobs:
     needs: get-go-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
           go-version: ${{ needs.get-go-version.outputs.go-version }}
 
@@ -66,6 +66,19 @@ jobs:
             --rerun-fails \
             --packages="./acl/... ./agent/config/... ./agent/proxycfg/... ./agent/structs/... ./agent/submatview/... ./agent/xds/... ./command/connect/envoy/... ./version/..." \
             -- -timeout 30m
+
+      # The whole ./agent package is too slow and memory-hungry for one standard
+      # runner, so run only the tests for the code BC patches change there: check
+      # registration (the check monitor backport) and the HTTP handler wrapper
+      # (log_acl_info).
+      - name: Test agent
+        run: |
+          go run gotest.tools/gotestsum@v1.12.3 \
+            --format=github-actions \
+            --rerun-fails \
+            --packages="./agent/" \
+            -- -timeout 30m \
+            -run 'TestAgent_(AddCheck|AddService|RemoveCheck|RemoveService|UpdateCheck)|TestHTTPAPI|TestHTTP_wrap'
 
       - name: Test envoyextensions
         working-directory: envoyextensions
