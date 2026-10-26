@@ -83,6 +83,17 @@ jobs:
             -- -tags hashicorpmetrics -timeout 30m \
             -run 'TestAgent_(AddCheck|AddService|RemoveCheck|RemoveService|UpdateCheck)|TestHTTPAPI|TestHTTP_wrap'
 
+      # Likewise for ./agent/consul: the server RPC connection handling (the idle
+      # pooled RPC stream backport).
+      - name: Test agent/consul
+        run: |
+          go run gotest.tools/gotestsum@v1.12.3 \
+            --format=github-actions \
+            --rerun-fails \
+            --packages="./agent/consul/" \
+            -- -tags hashicorpmetrics -timeout 30m \
+            -run 'TestRPC_|TestBoundedHeaderCodec'
+
       - name: Test envoyextensions
         working-directory: envoyextensions
         run: go test -tags hashicorpmetrics ./...
