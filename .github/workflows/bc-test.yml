@@ -44,8 +44,9 @@ jobs:
       # Catches a signature change that breaks callers in packages the unit job
       # doesn't run. lostcancel is off because upstream v2.0.4 trips it
       # (agent/grpc-external/services/peerstream/stream_resources.go).
+      # hashicorpmetrics, here and in the tests, matches the release build.
       - name: Vet
-        run: go vet -lostcancel=false ./...
+        run: go vet -tags hashicorpmetrics -lostcancel=false ./...
 
   unit:
     needs: get-go-version
@@ -67,7 +68,7 @@ jobs:
             --format=github-actions \
             --rerun-fails \
             --packages="./acl/... ./agent/config/... ./agent/proxycfg/... ./agent/structs/... ./agent/submatview/... ./agent/xds/... ./command/connect/envoy/... ./version/..." \
-            -- -timeout 30m
+            -- -tags hashicorpmetrics -timeout 30m
 
       # The whole ./agent package is too slow and memory-hungry for one standard
       # runner, so run only the tests for the code BC patches change there: check
@@ -79,9 +80,9 @@ jobs:
             --format=github-actions \
             --rerun-fails \
             --packages="./agent/" \
-            -- -timeout 30m \
+            -- -tags hashicorpmetrics -timeout 30m \
             -run 'TestAgent_(AddCheck|AddService|RemoveCheck|RemoveService|UpdateCheck)|TestHTTPAPI|TestHTTP_wrap'
 
       - name: Test envoyextensions
         working-directory: envoyextensions
-        run: go test ./...
+        run: go test -tags hashicorpmetrics ./...

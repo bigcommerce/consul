@@ -60,9 +60,13 @@ jobs:
           CGO_ENABLED: "0"
           GOOS: linux
           GOARCH: amd64
+        # hashicorpmetrics matches upstream's Makefile and release build
+        # (hashicorp/consul#23813). Without it, go-metrics/compat sends Raft, Serf
+        # and Memberlist metrics to armon/go-metrics instead of Consul's sinks, so
+        # they are lost.
         run: |
           T="github.com/hashicorp/consul/version"
-          go build -trimpath -buildvcs=false \
+          go build -trimpath -buildvcs=false -tags hashicorpmetrics \
             -ldflags "-X ${T}.GitCommit=${GITHUB_SHA::8} -X ${T}.BuildDate=$(build-support/scripts/build-date.sh)" \
             -o dist/consul .
           ./dist/consul version
