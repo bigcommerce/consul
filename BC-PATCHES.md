@@ -23,6 +23,7 @@ In branch order.
 | 7 | test: Add BC maxConnections and egress timeouts to new upstream goldens | Test fixup | Regenerated at each rebase |
 | 8 | feat: Add a proxy config key for the upstream connection idle timeout | Feature, upstream PR open | [hashicorp/consul#24053](https://github.com/hashicorp/consul/pull/24053) ships |
 | 9 | fix: Stop the previous check monitor when a check changes type | Backport, upstream PR open | [hashicorp/consul#24008](https://github.com/hashicorp/consul/pull/24008) ships |
+| 10 | fix: Stop serializing every catalog write on the leader | Bug fix, not upstreamed | Upstream keys the node write lock by resolved node identity |
 
 ### 1. Egress routes get 0s request timeouts
 
@@ -67,7 +68,7 @@ Joe Cai, 2026-10. `bc-build` builds the binary and publishes releases on `v*-bc*
 
 - Code: `.github/workflows/bc-build.yml`, `bc-test.yml`.
 - Upstream workflows need HashiCorp runners and secrets, so they are disabled in the repository's Actions settings; see [Upstream workflows](#upstream-workflows).
-- When a patch touches a new package, add it to the `--packages` list in `bc-test.yml`. The whole `./agent/` package is too slow for one runner, so its step runs only the tests matching a `-run` pattern (patch 9's check registration and patch 4's HTTP handler wrapper); extend the pattern when a patch changes other code there.
+- When a patch touches a new package, add it to the `--packages` list in `bc-test.yml`. The whole `./agent/` package is too slow for one runner, so its step runs only the tests matching a `-run` pattern (patch 9's check registration and patch 4's HTTP handler wrapper); extend the pattern when a patch changes other code there. `./agent/consul/` is handled the same way, for patch 10's node write locks.
 - On a `v*-bc*` tag, `bc-build` fails unless the binary reports the tag's version (`vX.Y.Z-bc.N` → `Consul vX.Y.Z-bcN`).
 
 ### 7. Golden fixup for new upstream test cases
@@ -88,6 +89,13 @@ Joe Cai, 2026-10, [bigcommerce/consul PR #900](https://github.com/bigcommerce/co
 Backport of [hashicorp/consul#24008](https://github.com/hashicorp/consul/pull/24008), open upstream. Re-registering a check ID as a different type left the old monitor running, so two monitors flapped the check and synced each change as a catalog write. Nomad sidecars hit this on reload. v2.1.0 includes [hashicorp/consul#23088](https://github.com/hashicorp/consul/pull/23088), which removes that trigger, but not the leak.
 
 - Code: `agent/agent.go`, `agent/agent_test.go`, `.changelog/24008.txt`.
+
+### 10. Node write locks without the shared stripe
+
+Joe Cai, 2026-11. v2.1.0's node write locks ([hashicorp/consul#24062](https://github.com/hashicorp/consul/pull/24062)) take a shared stripe 0 on every `Catalog.Register`, `Catalog.Deregister` and catalog `Txn.Apply`, held through the Raft apply, so the leader runs one catalog write at a time. In prd-us-central1 that capped `Catalog.Register` at about 95/s against about 115/s of anti-entropy demand, and p50 went from 12 ms to 400 ms. Client agents hold their local state lock across the slow syncs, so Nomad's service registrations timed out and Connect sidecars failed `envoy_bootstrap`. The patch drops stripe 0 and keeps the per-node stripes. A write that names a node by an ID stored under a different name is no longer serialized with writes to the stored name; anti-entropy always sends the agent's own name and ID.
+
+- Code: `agent/consul/node_write_lock.go`, `node_write_lock_test.go`.
+- Upstream: no issue or PR as of 2026-11-04. Drop when upstream locks the resolved node's stripe instead of the shared one.
 
 ## Rebasing onto a new upstream release
 
