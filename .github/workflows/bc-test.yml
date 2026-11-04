@@ -80,6 +80,17 @@ jobs:
             -- -timeout 30m \
             -run 'TestAgent_(AddCheck|AddService|RemoveCheck|RemoveService|UpdateCheck)|TestHTTPAPI|TestHTTP_wrap'
 
+      # Likewise for ./agent/consul: the catalog node write locks (the shared
+      # stripe patch) and the check ownership races they guard.
+      - name: Test agent/consul
+        run: |
+          go run gotest.tools/gotestsum@v1.12.3 \
+            --format=github-actions \
+            --rerun-fails \
+            --packages="./agent/consul/" \
+            -- -timeout 30m \
+            -run 'NodeWriteLock|TestCatalog_Register_(ConcurrentCheckOwnership|CheckIDCrossServiceTakeover)'
+
       - name: Test envoyextensions
         working-directory: envoyextensions
         run: go test ./...
