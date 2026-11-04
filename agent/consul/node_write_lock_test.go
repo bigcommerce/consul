@@ -51,13 +51,13 @@ func TestNodeWriteLocks_DuplicateIndexes(t *testing.T) {
 	}
 }
 
-func TestNodeWriteLocks_CatalogWritesShareStripe(t *testing.T) {
-	// Find two nodes on different, non-zero stripes.
+// BigCommerce: upstream serializes writes to every node through a shared
+// stripe 0. Writes to nodes on different stripes must not wait for each other.
+func TestNodeWriteLocks_DifferentNodesDoNotWait(t *testing.T) {
 	idxA, idxB := -1, -1
 	for i := 0; idxB < 0; i++ {
 		idx := nodeWriteLockIndex("default", "", fmt.Sprintf("node-%d", i))
 		switch {
-		case idx == 0:
 		case idxA < 0:
 			idxA = idx
 		case idx != idxA:
@@ -67,6 +67,7 @@ func TestNodeWriteLocks_CatalogWritesShareStripe(t *testing.T) {
 
 	var locks nodeWriteLocks
 	unlockA := locks.lock([]int{idxA})
+	defer unlockA()
 
 	acquired := make(chan func())
 	go func() { acquired <- locks.lock([]int{idxB}) }()
@@ -74,8 +75,25 @@ func TestNodeWriteLocks_CatalogWritesShareStripe(t *testing.T) {
 	select {
 	case unlockB := <-acquired:
 		unlockB()
+	case <-time.After(5 * time.Second):
+		t.Fatal("a write to another node waited for the first node's write lock")
+	}
+}
+
+func TestNodeWriteLocks_SameNodeWaits(t *testing.T) {
+	idx := nodeWriteLockIndex("default", "", "node-a")
+
+	var locks nodeWriteLocks
+	unlockA := locks.lock([]int{idx})
+
+	acquired := make(chan func())
+	go func() { acquired <- locks.lock([]int{nodeWriteLockIndex("default", "", "Node-A")}) }()
+
+	select {
+	case unlockB := <-acquired:
+		unlockB()
 		unlockA()
-		t.Fatal("writes to different nodes must share a stripe, but the second write did not wait")
+		t.Fatal("a second write to the same node did not wait for the first")
 	case <-time.After(200 * time.Millisecond):
 	}
 

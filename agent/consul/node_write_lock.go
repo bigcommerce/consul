@@ -24,9 +24,12 @@ const nodeWriteLockStripes = 256
 //
 // Writes that target a node by ID can resolve to a stored node whose name
 // differs from the request's name, so per-node stripes alone cannot guarantee
-// that conflicting writes share a lock. Every catalog write therefore also
-// takes the shared stripe 0, serializing all guarded writes until the lock key
-// can account for the resolved node identity.
+// that conflicting writes share a lock. Upstream therefore also takes a shared
+// stripe 0 on every catalog write. That serializes every catalog write in the
+// datacenter through its Raft apply, which capped the leader below the
+// anti-entropy write rate of a large datacenter. BigCommerce drops the shared
+// stripe: writes to the same node name still serialize, and only a write that
+// names a node by an ID stored under a different name is left unguarded.
 type nodeWriteLocks struct {
 	stripes [nodeWriteLockStripes]sync.Mutex
 }
@@ -43,15 +46,14 @@ func nodeWriteLockIndex(partition, peerName, node string) int {
 	return int(h.Sum32() % nodeWriteLockStripes)
 }
 
-// lock acquires the given stripes plus the shared stripe 0 in ascending order,
-// so callers locking several nodes cannot deadlock, and returns a function that
-// releases them. Requests without catalog operations pass no indexes and take
-// no lock, so KV-only transactions are not serialized.
+// lock acquires the given stripes in ascending order, so callers locking
+// several nodes cannot deadlock, and returns a function that releases them.
+// Requests without catalog operations pass no indexes and take no lock, so
+// KV-only transactions are not serialized.
 func (l *nodeWriteLocks) lock(indexes []int) func() {
 	if len(indexes) == 0 {
 		return func() {}
 	}
-	indexes = append(indexes, 0)
 	sort.Ints(indexes)
 	unique := indexes[:0]
 	prev := -1
