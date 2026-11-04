@@ -34,7 +34,7 @@ var (
 	//
 	// BigCommerce builds use "bcN", where N matches the release tag
 	// (vX.Y.Z-bc.N). Bump it for each release of the same upstream version.
-	VersionPrerelease = "bc1"
+	VersionPrerelease = "bc2"
 
 	// The date/time of the build (actually the HEAD commit in git, to preserve stability)
 	// This isn't just informational, but is also used by the licensing system. Default is chosen to be flagantly wrong.
